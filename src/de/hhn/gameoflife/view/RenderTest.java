@@ -23,7 +23,7 @@ public class RenderTest extends JFrame implements Runnable, MouseListener, KeyLi
             @Override
             public void paint(Graphics g) {
                 int width = getWidth(), height = getHeight();
-                g.drawImage(image, -200, -200, width, height, null);
+                g.drawImage(image, 0, 0, width, height, null);
             }
         };
         setContentPane(canvas);
