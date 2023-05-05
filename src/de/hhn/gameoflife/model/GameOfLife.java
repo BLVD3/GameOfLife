@@ -22,6 +22,12 @@ public class GameOfLife {
     // Ruleset for alive cells
     private final short deathRule;
 
+    /**
+     * @param width
+     * @param height
+     * @param birthRule
+     * @param deathRule
+     */
     public GameOfLife(int width, int height, short birthRule, short deathRule) {
         this.width = width;
         this.height = height;
