@@ -23,10 +23,13 @@ public class GameOfLife {
     private final short deathRule;
 
     /**
-     * @param width
-     * @param height
-     * @param birthRule
-     * @param deathRule
+     * @param width Width of this GOL field
+     * @param height Height of this GOL field
+     * @param birthRule A short describing the behaviour of a dead Cell.
+     *                  Example:
+     *                  A 1 at Position 3 makes it so a Cell becomes alive with 3 neighbouring alive cells.
+     *                  Everything beyond the 9th bit will be ignored.
+     * @param deathRule A short describing the behaviour of an alive Cell.
      */
     public GameOfLife(int width, int height, short birthRule, short deathRule) {
         this.width = width;
@@ -38,11 +41,15 @@ public class GameOfLife {
         changedBits = new byte[fieldData.length];
     }
 
+    /**
+     * @param width Width of this GOL field
+     * @param height Height of this GOL field
+     */
     public GameOfLife(int width, int height) {
         this(width, height, (short)0b100000, (short)0b110011111);
     }
 
-    public void assertBounds(int x, int y) {
+    private void assertBounds(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height)
             throw new IndexOutOfBoundsException(
                     "Attempted to get Alive state of " + x + ", " + y
@@ -66,7 +73,7 @@ public class GameOfLife {
      * Sets the Cell State for the next Step. Should only be called in {@link #step()}.
      */
     private void setAliveNextStep(int x, int y, boolean alive) {
-        assertBounds(x, y);
+        //assertBounds(x, y);
         int bit = y * width + x;
         if (alive)
             nextStep[bit >> 3] |= 1 << (bit & 7);
