@@ -8,6 +8,10 @@ public class GOLWindow extends JInternalFrame {
     private volatile Color aliveColor;
     private volatile Color deadColor;
 
+    public GOLWindow(int width, int height) {
+
+    }
+
     public int getWaitTime() {
         return waitTime;
     }

@@ -2,6 +2,7 @@ package de.hhn.gameoflife;
 
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.util.GOLModeChangedListener;
+import de.hhn.gameoflife.view.GOLWindowDialog;
 import de.hhn.gameoflife.view.MainWindow;
 import de.hhn.gameoflife.view.RenderTest;
 
@@ -14,7 +15,7 @@ public class GameOfLifeApplication {
     private static GOLMode mode = GOLMode.SET;
 
     public static void main(String[] args) {
-        new RenderTest();
+        new MainWindow();
     }
 
     public static void setMode(GOLMode mode) {

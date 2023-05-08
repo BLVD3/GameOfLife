@@ -13,8 +13,7 @@ import static de.hhn.gameoflife.util.RenderedImageHelper.fillRenderedImage;
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
 public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener {
-
-    BufferedImage renderImage;
+    BufferedImage buffer;
     GOLWindow window;
     GameOfLife gol;
     Thread thread;
@@ -25,14 +24,16 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         }
 
         this.window = window;
-        renderImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         gol = new GameOfLife(width, height);
-        fillRenderedImage(renderImage, Color.WHITE);
+        fillRenderedImage(buffer, Color.WHITE);
+        thread = new Thread(this);
+        thread.start();
     }
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(renderImage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(buffer, 0, 0, getWidth(), getHeight(), null);
     }
 
     @Override
@@ -63,11 +64,12 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
     @Override
     public void modeChangedEvent(GOLMode mode) {
-        notifyAll();
+        if (mode == GOLMode.RUN)
+            notifyAll();
     }
 
     @Override
     public void cellChangedEvent(int x, int y, boolean alive) {
-        renderImage.setRGB(x, y, (alive ? window.getAliveColor() : window.getDeadColor()).getRGB());
+        buffer.setRGB(x, y, (alive ? window.getAliveColor() : window.getDeadColor()).getRGB());
     }
 }
