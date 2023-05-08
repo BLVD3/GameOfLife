@@ -47,7 +47,7 @@ public class GOLWindowDialog extends JInternalFrame {
         int width, height;
         try {
             width = Integer.parseInt(widthInput.getText());
-            height = Integer.parseInt(widthInput.getText());
+            height = Integer.parseInt(heightInput.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Die Breite und Höhe müssen Nummern sein!");
             return;

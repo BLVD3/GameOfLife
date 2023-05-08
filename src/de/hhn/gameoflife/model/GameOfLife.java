@@ -98,7 +98,7 @@ public class GameOfLife {
         if (alive)
             fieldData[bit >> 3] |= 1 << (bit & 7);
         else
-            fieldData[bit >> 3] ^= 1 << (bit & 7);
+            fieldData[bit >> 3] &= ~(1 << (bit & 7));
     }
 
     /**

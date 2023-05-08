@@ -62,6 +62,6 @@ public class MainWindow extends JFrame {
     }
 
     public void addWindow(int width, int height) {
-        bottomPanel.add(new GOLWindow(width, height));
+        bottomPanel.add(new GOLWindow(width, height, bottomPanel));
     }
 }
