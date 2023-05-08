@@ -1,6 +1,6 @@
 package de.hhn.gameoflife.model;
 
-import de.hhn.gameoflife.util.GOLChangeOperator;
+import de.hhn.gameoflife.util.GOLCellChangedListener;
 
 /**
  * Highly optimized Torus shaped Game of Life model
@@ -10,17 +10,25 @@ import de.hhn.gameoflife.util.GOLChangeOperator;
 public class GameOfLife {
     // Contains the state of each cell. One bit per cell
     // Layout: 7 6 5 4 3 2 1 0 | 15 14 13 12 11 10 9 8 | 23 ...
-    private byte[] fieldData;
-    private byte[] nextStep;
-    private final byte[] changedBits;
-    private final int width;
-    private final int height;
+    protected byte[] fieldData;
+    protected byte[] nextStep;
+    protected final byte[] changedBits;
+    protected final int width;
+    protected final int height;
     // For rule sets 1 means change 0 mean no change
     // Bit 0 no neighbours bit 8 8 neighbours
     // Ruleset for dead cells
-    private final short birthRule;
+    protected final short birthRule;
     // Ruleset for alive cells
-    private final short deathRule;
+    protected final short deathRule;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     /**
      * @param width Width of this GOL field
@@ -49,7 +57,7 @@ public class GameOfLife {
         this(width, height, (short)0b100000, (short)0b110011111);
     }
 
-    private void assertBounds(int x, int y) {
+    protected void assertBounds(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height)
             throw new IndexOutOfBoundsException(
                     "Attempted to get Alive state of " + x + ", " + y
@@ -72,7 +80,7 @@ public class GameOfLife {
     /**
      * Sets the Cell State for the next Step. Should only be called in {@link #step()}.
      */
-    private void setAliveNextStep(int x, int y, boolean alive) {
+    protected void setAliveNextStep(int x, int y, boolean alive) {
         //assertBounds(x, y);
         int bit = y * width + x;
         if (alive)
@@ -143,12 +151,12 @@ public class GameOfLife {
         nextStep = temp;
     }
 
-    public void forEachChange(GOLChangeOperator function) {
+    public void forEachChange(GOLCellChangedListener listener) {
         int x = 0;
         int y = 0;
         for (int i = 0; i < width * height; i++) {
             if ((changedBits[i >> 3] >> (i & 7) & 1) == 1)
-                function.apply(x, y, getAlive(i));
+                listener.cellChangedEvent(x, y, getAlive(i));
             if (++x == width) {
                 x = 0;
                 y++;

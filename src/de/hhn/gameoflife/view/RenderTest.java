@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
+@Deprecated
 public class RenderTest extends JFrame implements Runnable, MouseListener, KeyListener {
     volatile boolean wait;
     BufferedImage image;
@@ -37,7 +38,7 @@ public class RenderTest extends JFrame implements Runnable, MouseListener, KeyLi
         g.dispose();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < image.getWidth(); i++) {
             foo(i, 100);
         }
         wait = false;
@@ -52,11 +53,11 @@ public class RenderTest extends JFrame implements Runnable, MouseListener, KeyLi
             gol.forEachChange((x, y, alive) -> {
                 image.setRGB(x, y, alive ? 0 : 0xffffff);
             });
-            try {
-                Thread.sleep(5);
+            /*try {
+                Thread.sleep(0);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
             repaint();
         }
     }
