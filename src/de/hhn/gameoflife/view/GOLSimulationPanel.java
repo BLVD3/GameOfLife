@@ -42,7 +42,6 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         g.drawImage(buffer, 0, 0, getWidth(), getHeight(), null);
     }
 

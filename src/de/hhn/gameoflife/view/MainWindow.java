@@ -9,7 +9,7 @@ import java.awt.*;
 public class MainWindow extends JFrame {
     //Components
     JPanel topPanel;
-    JPanel bottomPanel;
+    JDesktopPane bottomPanel;
     JButton newWindowButton;
     JButton shapeWindowButton;
     JComboBox<GOLMode> modeSelector;
@@ -37,7 +37,7 @@ public class MainWindow extends JFrame {
         topPanel.add(modeSelector);
         topPanel.add(newWindowButton);
         topPanel.add(shapeWindowButton);
-        bottomPanel = new JPanel();
+        bottomPanel = new JDesktopPane();
         bottomPanel.setLayout(null);
         bottomPanel.setBackground(new Color(112, 112, 112));
         bottomPanel.add(newWindowDialog);

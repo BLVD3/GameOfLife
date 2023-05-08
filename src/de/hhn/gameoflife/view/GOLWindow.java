@@ -11,13 +11,13 @@ public class GOLWindow extends JInternalFrame  {
     private volatile Color deadColor;
 
     public GOLWindow(int width, int height, Container container) {
-        waitTime = 50;
+        waitTime = 0;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         float sizeFactor = 16;
-        while (height * sizeFactor > container.getHeight() * (2 / 3f))
+        while (height * sizeFactor > container.getHeight())
             sizeFactor *= .5f;
-        while (width * sizeFactor > container.getWidth() * (2 / 3f))
+        while (width * sizeFactor > container.getWidth())
             sizeFactor *= .5f;
         setLayout(new BorderLayout());
         simulationPanel = new GOLSimulationPanel(width, height, this);
