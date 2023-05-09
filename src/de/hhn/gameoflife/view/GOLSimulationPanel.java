@@ -7,12 +7,14 @@ import de.hhn.gameoflife.util.GOLModeChangedListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.util.RenderedImageHelper.fillRenderedImage;
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
-public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener {
+public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener, ComponentListener {
     BufferedImage buffer;
     GOLWindow window;
     GameOfLife gol;
@@ -38,6 +40,7 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
         thread = new Thread(this);
         thread.start();
+
     }
 
     @Override
@@ -88,4 +91,17 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
     }
 
 
+    @Override
+    public void componentResized(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) { }
+
+    @Override
+    public void componentShown(ComponentEvent e) { }
+
+    @Override
+    public void componentHidden(ComponentEvent e) { }
 }
