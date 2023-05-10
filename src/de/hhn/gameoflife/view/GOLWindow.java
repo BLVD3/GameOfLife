@@ -2,8 +2,11 @@ package de.hhn.gameoflife.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-public class GOLWindow extends JInternalFrame  {
+public class GOLWindow extends JInternalFrame implements MouseWheelListener {
     private static int NEXT_ID = 1;
     private volatile int waitTime;
     private final GOLSimulationPanel simulationPanel;
@@ -11,7 +14,7 @@ public class GOLWindow extends JInternalFrame  {
     private volatile Color deadColor;
 
     public GOLWindow(int width, int height, Container container) {
-        waitTime = 0;
+        waitTime = 100;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         float sizeFactor = 16;
@@ -30,6 +33,7 @@ public class GOLWindow extends JInternalFrame  {
         setResizable(true);
         setOpaque(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addMouseWheelListener(this);
     }
 
     public int getWaitTime() {
@@ -42,5 +46,10 @@ public class GOLWindow extends JInternalFrame  {
 
     public Color getDeadColor() {
         return deadColor;
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+        System.out.println(mouseWheelEvent.getWheelRotation());
     }
 }

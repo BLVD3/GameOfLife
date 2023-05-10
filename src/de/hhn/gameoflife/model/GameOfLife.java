@@ -104,21 +104,19 @@ public class GameOfLife {
     /**
      * @return Count of Alive Neighbours
      */
-    public byte getNeighbours(int x, int y) {
+    public byte getNeighbours(int x, int y) { //TODO Perfomance testen
         byte neighbourCount = 0;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                int targetX;
-                int targetY;
-                if ((targetX = (x + i)) >= width)
-                    targetX -= width;
-                if (targetX < 0)
-                    targetX += width;
-                if ((targetY = (y + j)) >= height)
-                    targetY -= height;
-                if (targetY < 0)
-                    targetY += height;
-                if (getAlive(targetX, targetY))
+        int[] xs = new int[3];
+        int[] ys = new int[3];
+        xs[1] = x;
+        ys[1] = y;
+        xs[0] = x < 1 ? x + width - 1 : x - 1;
+        ys[0] = y < 1 ? y + height - 1 : y - 1;
+        xs[2] = x < width - 1 ? x + 1 : x + 1 - width;
+        ys[2] = y < height - 1 ? y + 1 : y + 1 - height;
+        for (int i : xs) {
+            for (int j : ys) {
+                if (getAlive(i, j))
                     neighbourCount++;
             }
         }

@@ -1,5 +1,6 @@
 package de.hhn.gameoflife.view;
 
+import de.hhn.gameoflife.GameOfLifeApplication;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
@@ -15,20 +16,18 @@ import static de.hhn.gameoflife.util.RenderedImageHelper.fillRenderedImage;
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
 public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener, ComponentListener {
-    BufferedImage buffer;
-    GOLWindow window;
-    GameOfLife gol;
-    Thread thread;
-    static final Object SYNC_OBJ = new Object();
+    private final BufferedImage buffer;
+    private final BufferedImageZoom zoom;
+    private final GOLWindow window;
+    private final GameOfLife gol;
 
     public GOLSimulationPanel(int width, int height, GOLWindow window) {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Width and/or height below 0. Width: " + width + " Height: " + height);
         }
 
-        setOpaque(true);
-
         this.window = window;
+
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         gol = new GameOfLife(width, height);
         for (int i = 0; i < width; i++) {
@@ -37,15 +36,26 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
             }
         }
         updateAllCells();
+        zoom = new BufferedImageZoom(new Dimension(getWidth(), getHeight()), new Dimension(buffer.getWidth(), buffer.getHeight()));
 
-        thread = new Thread(this);
+        addComponentListener(this);
+        GameOfLifeApplication.addListener(this);
+        Thread thread = new Thread(this);
         thread.start();
-
     }
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(buffer, 0, 0, getWidth(), getHeight(), null);
+        Rectangle source = zoom.getSourceRect();
+        Rectangle target = zoom.getTargetRect();
+        g.drawImage(buffer,
+                target.x, target.y,
+                target.x + target.width - 1,
+                target.y + target.height - 1,
+                source.x, source.y,
+                source.x + source.width - 1,
+                source.y + source.height - 1,
+                null);
     }
 
     @Override
@@ -58,8 +68,7 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
                 while (System.currentTimeMillis() - start < window.getWaitTime())
                     Thread.onSpinWait();
             } else {
-                while (getMode() != GOLMode.RUN)
-                    Thread.onSpinWait();
+                Thread.onSpinWait();
             }
         }
     }
@@ -80,6 +89,7 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         repaint();
     }
 
+
     @Override
     public void modeChangedEvent(GOLMode mode) {
 
@@ -90,10 +100,10 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         buffer.setRGB(x, y, (alive ? window.getAliveColor() : window.getDeadColor()).getRGB());
     }
 
-
     @Override
     public void componentResized(ComponentEvent e) {
-
+        zoom.resizeRenderPane(getSize());
+        repaint();
     }
 
     @Override
@@ -104,4 +114,15 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
     @Override
     public void componentHidden(ComponentEvent e) { }
+
+    public void setZoom(byte zoomLevel) {
+        zoom.setZoom(zoomLevel);
+        if (zoom.getZoomLevel() == 1) {
+            zoom.setShift(0.5f,0.5f);
+        }
+    }
+
+    public void setShift(float shiftX, float shiftY) {
+        zoom.setShift(shiftX, shiftY);
+    }
 }

@@ -2,15 +2,12 @@ package de.hhn.gameoflife;
 
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.util.GOLModeChangedListener;
-import de.hhn.gameoflife.view.GOLWindowDialog;
 import de.hhn.gameoflife.view.MainWindow;
-import de.hhn.gameoflife.view.RenderTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameOfLifeApplication {
-    private static long NEXT_Z = 0; //TODO Z_ORDER
     private static final List<GOLModeChangedListener> MODE_CHANGED_LISTENERS = new ArrayList<>();
     private static final Object lock = new Object();
     private static volatile GOLMode mode = GOLMode.SET; //TODO Remove volatile
@@ -45,9 +42,5 @@ public class GameOfLifeApplication {
     public static void removeListener(GOLModeChangedListener listener) {
         if (MODE_CHANGED_LISTENERS.contains(listener))
             removeListener(listener);
-    }
-
-    public static long GetNextZ() {
-        return NEXT_Z++;
     }
 }
