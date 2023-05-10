@@ -84,10 +84,8 @@ public class BufferedImageZoom {
     private void calculateRenderBounds() {
         targetRect = renderTarget.intersection(imagePosition);
         sourceRect = (Rectangle) targetRect.clone();
-        sourceRect.x += renderTarget.x - imagePosition.x;
-        sourceRect.y += renderTarget.y - imagePosition.y;
-        sourceRect.x = Math.round(sourceRect.x / scale);
-        sourceRect.y = Math.round(sourceRect.y / scale);
+        sourceRect.x = Math.round((renderTarget.x - imagePosition.x) / scale);
+        sourceRect.y = Math.round((renderTarget.y - imagePosition.y) / scale);
         sourceRect.height = Math.round(sourceRect.height / scale);
         sourceRect.width = Math.round(sourceRect.width / scale);
     }
