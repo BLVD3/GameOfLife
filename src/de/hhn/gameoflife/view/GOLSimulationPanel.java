@@ -50,11 +50,11 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         Rectangle target = zoom.getTargetRect();
         g.drawImage(buffer,
                 target.x, target.y,
-                target.x + target.width - 1,
-                target.y + target.height - 1,
+                target.x + target.width,
+                target.y + target.height,
                 source.x, source.y,
-                source.x + source.width - 1,
-                source.y + source.height - 1,
+                source.x + source.width,
+                source.y + source.height,
                 null);
     }
 
