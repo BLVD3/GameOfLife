@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class GOLWindow extends JInternalFrame implements MouseWheelListener {
+public class GOLWindow extends JInternalFrame {
     private static int NEXT_ID = 1;
     private volatile int waitTime;
     private final GOLSimulationPanel simulationPanel;
@@ -33,7 +33,6 @@ public class GOLWindow extends JInternalFrame implements MouseWheelListener {
         setResizable(true);
         setOpaque(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        addMouseWheelListener(this);
     }
 
     public int getWaitTime() {
@@ -46,10 +45,5 @@ public class GOLWindow extends JInternalFrame implements MouseWheelListener {
 
     public Color getDeadColor() {
         return deadColor;
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-        System.out.println(mouseWheelEvent.getWheelRotation());
     }
 }

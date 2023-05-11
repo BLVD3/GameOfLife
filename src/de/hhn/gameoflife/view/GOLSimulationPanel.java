@@ -1,6 +1,7 @@
 package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.GameOfLifeApplication;
+import de.hhn.gameoflife.control.BufferedImageZoom;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
@@ -16,9 +17,9 @@ import static de.hhn.gameoflife.util.RenderedImageHelper.fillRenderedImage;
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
 public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener, ComponentListener {
-    private final BufferedImage buffer;
-    private final BufferedImageZoom zoom;
-    private final GOLWindow window;
+    private final BufferedImage buffer; // Image which will be drawn on the Panel
+    private final BufferedImageZoom zoom; // Helper class to calculate Size, Zoom and Position of the Image
+    private final GOLWindow window; // Parent window
     private final GameOfLife gol;
 
     public GOLSimulationPanel(int width, int height, GOLWindow window) {
@@ -27,19 +28,20 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         }
 
         this.window = window;
-
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         gol = new GameOfLife(width, height);
+        zoom = new BufferedImageZoom(new Dimension(getWidth(), getHeight()), new Dimension(buffer.getWidth(), buffer.getHeight()));
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 gol.setAlive(i, j, Math.random() < 0.5);
             }
         }
-        updateAllCells();
-        zoom = new BufferedImageZoom(new Dimension(getWidth(), getHeight()), new Dimension(buffer.getWidth(), buffer.getHeight()));
 
-        addComponentListener(this);
         GameOfLifeApplication.addListener(this);
+        addComponentListener(this);
+
+        updateAllCells();
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -83,12 +85,10 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
         for (int i = 0; i < gol.getWidth(); i++) {
             for (int j = 0; j < gol.getHeight(); j++) {
                 cellChangedEvent(i, j, gol.getAlive(i, j));
-                //System.out.println(gol.getAlive(i, j));
             }
         }
         repaint();
     }
-
 
     @Override
     public void modeChangedEvent(GOLMode mode) {
@@ -117,12 +117,16 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
     public void setZoom(float zoomLevel) {
         zoom.setZoom(zoomLevel);
-        if (Math.abs(zoom.getZoomLevel() - 1.f) < 0.05f) {
-            zoom.setShift(0.5f,0.5f);
-        }
+        repaint();
+    }
+
+    public void setZoomDelta(float delta) {
+        zoom.setZoom(zoom.getZoomLevel() + delta);
+        repaint();
     }
 
     public void setShift(float shiftX, float shiftY) {
         zoom.setShift(shiftX, shiftY);
+        repaint();
     }
 }

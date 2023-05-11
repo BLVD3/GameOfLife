@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.view;
+package de.hhn.gameoflife.control;
 
 import java.awt.*;
 
@@ -99,7 +99,8 @@ public class BufferedImageZoom {
     public void reset() {
         xShift = .5f;
         yShift = .5f;
-        setZoom(1f);
+        zoomLevel = 1.0f;
+        calculateAll();
     }
 
     /**
