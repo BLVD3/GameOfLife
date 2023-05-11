@@ -102,7 +102,7 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
 
     @Override
     public void componentResized(ComponentEvent e) {
-        zoom.resizeRenderPane(getSize());
+        zoom.resizeRenderTarget(getSize());
         repaint();
     }
 
