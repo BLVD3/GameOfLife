@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.control;
+package de.hhn.gameoflife.view;
 
 import java.awt.*;
 

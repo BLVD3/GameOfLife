@@ -1,7 +1,6 @@
 package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.GameOfLifeApplication;
-import de.hhn.gameoflife.control.BufferedImageZoom;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
