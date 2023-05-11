@@ -13,7 +13,7 @@ public class BufferedImageZoom {
     private final Dimension imageSize; // The Size of the Buffered Image
     private final Rectangle imagePosition; // The Position of the Image after Zooming/Shifting
     private float scale; // The Scale of the image: imageSize -> imagePosition.size
-    private byte zoomLevel; // The Target zoom level TODO make float
+    private float zoomLevel; // The Target zoom level
     private float xShift, yShift; // The Position of the Image -> 0, 0 top Left corner centered; 1, 1 bottom right
 
     private Rectangle sourceRect; // Area on the image that should get Rendered
@@ -27,8 +27,8 @@ public class BufferedImageZoom {
         renderRect = new Rectangle(targetSize);
         this.imageSize = (Dimension)imageSize.clone();
         imagePosition = new Rectangle();
-        setZoom(1);
-        setShift(0.5f, 0.5f);
+        setZoom(1f);
+        setShift(.5f, .5f);
         calculateAll();
     }
 
@@ -56,7 +56,7 @@ public class BufferedImageZoom {
     /**
      * @return current zoom level
      */
-    public byte getZoomLevel() {
+    public float getZoomLevel() {
         return zoomLevel;
     }
 
@@ -84,9 +84,34 @@ public class BufferedImageZoom {
     /**
      * Sets the current zoom level
      */
-    public void setZoom(int level) {
-        zoomLevel = (byte)Math.max(Math.min(level, 8),1);
+    public void setZoom(float level) {
+        if (level <= 1.0f) {
+            reset();
+            return;
+        }
+        zoomLevel = Math.max(Math.min(level, 8f), 1f);
         calculateAll();
+    }
+
+    /**
+     * Sets zoom level to 1 and centers the image
+     */
+    public void reset() {
+        xShift = .5f;
+        yShift = .5f;
+        setZoom(1f);
+    }
+
+    /**
+     * Moves the image from its current position
+     * @param x Horizontal Movement
+     * @param y Vertical Movement
+     */
+    public void moveImage(float x, float y) {
+        xShift = Math.max(Math.min(x + xShift, 1f), 0f);
+        yShift = Math.max(Math.min(y + yShift, 1f), 0f);
+        calculateImagePosition();
+        calculateRenderBounds();
     }
 
     /**

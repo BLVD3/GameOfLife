@@ -115,9 +115,9 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
     @Override
     public void componentHidden(ComponentEvent e) { }
 
-    public void setZoom(byte zoomLevel) {
+    public void setZoom(float zoomLevel) {
         zoom.setZoom(zoomLevel);
-        if (zoom.getZoomLevel() == 1) {
+        if (Math.abs(zoom.getZoomLevel() - 1.f) < 0.05f) {
             zoom.setShift(0.5f,0.5f);
         }
     }
