@@ -3,8 +3,8 @@ package de.hhn.gameoflife.control;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
-import de.hhn.gameoflife.view.BufferedImageRendererPanel;
-import de.hhn.gameoflife.view.GOLWindow;
+import de.hhn.gameoflife.view.panels.BufferedImageRendererPanel;
+import de.hhn.gameoflife.view.windows.GOLWindow;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

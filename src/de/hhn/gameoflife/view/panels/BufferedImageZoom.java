@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.view;
+package de.hhn.gameoflife.view.panels;
 
 import java.awt.*;
 

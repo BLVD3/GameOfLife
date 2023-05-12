@@ -1,11 +1,7 @@
-package de.hhn.gameoflife.view;
-
-import com.sun.tools.javac.Main;
+package de.hhn.gameoflife.view.windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class GOLWindowDialog extends JInternalFrame {
 

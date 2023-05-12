@@ -1,9 +1,8 @@
 package de.hhn.gameoflife;
 
-import com.formdev.flatlaf.*;
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.util.GOLModeChangedListener;
-import de.hhn.gameoflife.view.MainWindow;
+import de.hhn.gameoflife.view.windows.MainWindow;
 
 import javax.swing.*;
 import java.util.ArrayList;
