@@ -172,6 +172,7 @@ public class ZoomHandler {
         sourceRect.y = Math.round((sourceRect.y - imagePosition.y) / scale);
         sourceRect.height = Math.round(sourceRect.height / scale);
         sourceRect.width = Math.round(sourceRect.width / scale);
+        fireZoomChangedEvent();
     }
 
     public void addListener(ZoomChangedListener listener) {

@@ -100,7 +100,6 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        System.out.println(keyEvent.getKeyCode());
         switch (keyEvent.getKeyCode()) {
             case 107 -> zoomHandler.setZoomDelta(.5f);
             case 109 -> zoomHandler.setZoomDelta(-.5f);
