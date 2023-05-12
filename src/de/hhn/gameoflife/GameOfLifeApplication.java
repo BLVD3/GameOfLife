@@ -17,11 +17,8 @@ public class GameOfLifeApplication {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarculaLaf");
-        } catch (UnsupportedLookAndFeelException ignored) {
-
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+                 IllegalAccessException ignored) { }
         new MainWindow();
     }
 

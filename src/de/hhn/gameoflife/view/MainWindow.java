@@ -49,6 +49,7 @@ public class MainWindow extends JFrame {
         //Maximizing in the end so Components appear properly
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
+        System.out.println(shapeWindowButton.getHeight());
     }
 
     private void newWindowButtonPressed() {

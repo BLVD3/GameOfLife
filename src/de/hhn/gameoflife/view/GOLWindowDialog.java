@@ -19,7 +19,7 @@ public class GOLWindowDialog extends JInternalFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setTitle("Neues Fenster");
         setLayout(null);
-        getContentPane().setPreferredSize(new Dimension(180, 93));
+        getContentPane().setPreferredSize(new Dimension(180, 111));
         pack();
         setResizable(false);
         setClosable(true);
@@ -30,11 +30,11 @@ public class GOLWindowDialog extends JInternalFrame {
         JButton button = new JButton("Fertig");
         button.addActionListener(e -> click());
 
-        widthLabel.setBounds(5, 10, 70, 21);
-        heightLabel.setBounds(5, 36, 70, 21);
-        widthInput.setBounds(75, 10, 100, 21);
-        heightInput.setBounds(75, 36, 100, 21);
-        button.setBounds(40, 62, 100, 21);
+        widthLabel.setBounds(5, 10, 70, 27);
+        heightLabel.setBounds(5, 42, 70, 27);
+        widthInput.setBounds(75, 10, 100, 27);
+        heightInput.setBounds(75, 42, 100, 27);
+        button.setBounds(40, 74, 100, 27);
 
         add(widthLabel);
         add(heightLabel);
