@@ -33,9 +33,9 @@ public class GameOfLife {
     /**
      * @param width Width of this GOL field
      * @param height Height of this GOL field
-     * @param birthRule A short describing the behaviour of a dead Cell.
-     *                  Example:
-     *                  A 1 at Position 3 makes it so a Cell becomes alive with 3 neighbouring alive cells.
+     * @param birthRule A short describing the behaviour of a dead Cell.<br/>
+     *                  Example:<br/>
+     *                  A 1 at Position 3 makes it so a Cell becomes alive with 3 neighbouring alive cells.<br/>
      *                  Everything beyond the 9th bit will be ignored.
      * @param deathRule A short describing the behaviour of an alive Cell.
      */
@@ -57,6 +57,9 @@ public class GameOfLife {
         this(width, height, (short)0b100000, (short)0b110011111);
     }
 
+    /**
+     * Checks for index out of Bounds exceptions
+     */
     protected void assertBounds(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height)
             throw new IndexOutOfBoundsException(
@@ -73,6 +76,10 @@ public class GameOfLife {
         return (fieldData[bit >> 3] >> (bit & 7) & 1) == 1;
     }
 
+    /**
+     * @param bit the cell (x + y * width = bit)
+     * @return true when the specified cell is alive
+     */
     public boolean getAlive(int bit) {
         return (fieldData[bit >> 3] >> (bit & 7) & 1) == 1;
     }
@@ -149,6 +156,10 @@ public class GameOfLife {
         nextStep = temp;
     }
 
+    /**
+     * Calls the listeners {@link GOLCellChangedListener#cellChangedEvent(int, int, boolean)} for every cell that has changed in the last step
+     * @param listener Listener containing the {@link GOLCellChangedListener#cellChangedEvent(int, int, boolean)}
+     */
     public void forEachChange(GOLCellChangedListener listener) {
         int x = 0;
         int y = 0;
