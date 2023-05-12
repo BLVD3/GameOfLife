@@ -30,7 +30,7 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
         }
         this.window = window;
         this.panel = panel;
-        waitTime = 100;
+        waitTime = 0;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GameOfLife(width, height);
@@ -72,8 +72,8 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
         long start;
         while (true) {
             if (getMode() == GOLMode.RUN) {
-                golStep();
                 start = System.currentTimeMillis();
+                golStep();
                 while (System.currentTimeMillis() - start < waitTime)
                     Thread.onSpinWait();
             } else

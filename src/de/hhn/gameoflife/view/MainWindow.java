@@ -33,13 +33,11 @@ public class MainWindow extends JFrame {
         shapeWindowButton.addActionListener(e -> shapeWindowButtonPressed());
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        topPanel.setBackground(new Color(68, 68, 68));
         topPanel.add(modeSelector);
         topPanel.add(newWindowButton);
         topPanel.add(shapeWindowButton);
         bottomPanel = new JDesktopPane();
         bottomPanel.setLayout(null);
-        bottomPanel.setBackground(new Color(112, 112, 112));
         bottomPanel.add(newWindowDialog);
 
 
