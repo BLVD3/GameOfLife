@@ -89,7 +89,7 @@ public class BufferedImageZoom {
             reset();
             return;
         }
-        zoomLevel = Math.max(Math.min(level, 8f), 1f);
+        zoomLevel = Math.max(level, 1f);
         calculateAll();
     }
 
@@ -140,8 +140,8 @@ public class BufferedImageZoom {
      * Repositions the pseudo image
      */
     private void calculateImagePosition() {
-        imagePosition.x = Math.round((float) renderRect.width / 2 - imagePosition.width * xShift);
-        imagePosition.y = Math.round((float) renderRect.height / 2 - imagePosition.height * yShift);
+        imagePosition.x = Math.round((float) renderRect.width / 2.f - imagePosition.width * xShift);
+        imagePosition.y = Math.round((float) renderRect.height / 2.f - imagePosition.height * yShift);
     }
 
     /**

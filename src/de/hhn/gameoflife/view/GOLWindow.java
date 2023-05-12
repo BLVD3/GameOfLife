@@ -1,49 +1,36 @@
 package de.hhn.gameoflife.view;
 
+import de.hhn.gameoflife.control.GOLWindowControl;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 public class GOLWindow extends JInternalFrame {
-    private static int NEXT_ID = 1;
-    private volatile int waitTime;
-    private final GOLSimulationPanel simulationPanel;
-    private volatile Color aliveColor;
-    private volatile Color deadColor;
+    private GOLWindowControl control;
+    private final BufferedImageRendererPanel simulationPanel;
 
     public GOLWindow(int width, int height, Container container) {
-        waitTime = 100;
-        aliveColor = Color.BLACK;
-        deadColor = Color.WHITE;
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Width and/or height below 0. Width: " + width + " Height: " + height);
+        }
         float sizeFactor = 16;
         while (height * sizeFactor > container.getHeight())
             sizeFactor *= .5f;
         while (width * sizeFactor > container.getWidth())
             sizeFactor *= .5f;
         setLayout(new BorderLayout());
-        simulationPanel = new GOLSimulationPanel(width, height, this);
+        simulationPanel = new BufferedImageRendererPanel(width, height);
+        control = new GOLWindowControl(this, simulationPanel, width, height);
         add(simulationPanel, BorderLayout.CENTER);
         getContentPane().setPreferredSize(new Dimension(Math.max((int)(width * sizeFactor), 300), (int)(height * sizeFactor)));
         pack();
-        setTitle("Fenster " + NEXT_ID++);
-        setVisible(true);
+        setTitle(GOLWindowControl.getNextName());
         setClosable(true);
+        setIconifiable(true);
         setResizable(true);
         setOpaque(true);
+        setFocusable(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    }
-
-    public int getWaitTime() {
-        return waitTime;
-    }
-
-    public Color getAliveColor() {
-        return aliveColor;
-    }
-
-    public Color getDeadColor() {
-        return deadColor;
+        setVisible(true);
     }
 }

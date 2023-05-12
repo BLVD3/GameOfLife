@@ -13,40 +13,30 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.util.RenderedImageHelper.fillRenderedImage;
-import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
-public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChangedListener, GOLCellChangedListener, ComponentListener {
+/**
+ * Renders a BufferedImage on itself. Aspect ratio is considered during rendering.<br/>
+ * Panel is also able to zoom into the image.
+ */
+public class BufferedImageRendererPanel extends JPanel implements ComponentListener {
     private final BufferedImage buffer; // Image which will be drawn on the Panel
     private final BufferedImageZoom zoom; // Helper class to calculate Size, Zoom and Position of the Image
-    private final GOLWindow window; // Parent window
-    private final GameOfLife gol;
 
-    public GOLSimulationPanel(int width, int height, GOLWindow window) {
+    public BufferedImageRendererPanel(int width, int height) {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Width and/or height below 0. Width: " + width + " Height: " + height);
         }
 
-        this.window = window;
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        gol = new GameOfLife(width, height);
         zoom = new BufferedImageZoom(new Dimension(getWidth(), getHeight()), new Dimension(buffer.getWidth(), buffer.getHeight()));
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                gol.setAlive(i, j, Math.random() < 0.5);
-            }
-        }
-
-        GameOfLifeApplication.addListener(this);
         addComponentListener(this);
-
-        updateAllCells();
-        Thread thread = new Thread(this);
-        thread.start();
     }
 
     @Override
     public void paint(Graphics g) {
+        g.setColor(new Color(0x333333));
+        g.fillRect(0, 0, getWidth(), getHeight());
         Rectangle source = zoom.getSourceRect();
         Rectangle target = zoom.getTargetRect();
         g.drawImage(buffer,
@@ -57,46 +47,6 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
                 source.x + source.width,
                 source.y + source.height,
                 null);
-    }
-
-    @Override
-    public void run() {
-        long start;
-        while (true) {
-            if (getMode() == GOLMode.RUN) {
-                golStep();
-                start = System.currentTimeMillis();
-                while (System.currentTimeMillis() - start < window.getWaitTime())
-                    Thread.onSpinWait();
-            } else {
-                Thread.onSpinWait();
-            }
-        }
-    }
-
-    public synchronized void golStep() {
-        gol.step();
-        gol.forEachChange(this);
-        repaint();
-    }
-
-    public void updateAllCells() {
-        for (int i = 0; i < gol.getWidth(); i++) {
-            for (int j = 0; j < gol.getHeight(); j++) {
-                cellChangedEvent(i, j, gol.getAlive(i, j));
-            }
-        }
-        repaint();
-    }
-
-    @Override
-    public void modeChangedEvent(GOLMode mode) {
-
-    }
-
-    @Override
-    public void cellChangedEvent(int x, int y, boolean alive) {
-        buffer.setRGB(x, y, (alive ? window.getAliveColor() : window.getDeadColor()).getRGB());
     }
 
     @Override
@@ -127,5 +77,23 @@ public class GOLSimulationPanel extends JPanel implements Runnable, GOLModeChang
     public void setShift(float shiftX, float shiftY) {
         zoom.setShift(shiftX, shiftY);
         repaint();
+    }
+
+    public void setShiftDelta(float x, float y) {
+        zoom.moveImage(x, y);
+        repaint();
+    }
+
+    public void setPixelNoRepaint(int x, int y, int rgb) {
+        buffer.setRGB(x, y, rgb);
+    }
+
+    public void setPixel(int x, int y, int rgb) {
+        buffer.setRGB(x, y, rgb);
+        repaint();
+    }
+
+    public float getZoom() {
+        return zoom.getZoomLevel();
     }
 }
