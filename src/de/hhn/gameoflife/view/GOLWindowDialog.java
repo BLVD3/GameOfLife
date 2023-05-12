@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.view.windows;
+package de.hhn.gameoflife.view;
 
 import javax.swing.*;
 import java.awt.*;

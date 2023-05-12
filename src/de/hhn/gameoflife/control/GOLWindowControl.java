@@ -3,14 +3,16 @@ package de.hhn.gameoflife.control;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
-import de.hhn.gameoflife.view.panels.BufferedImageRendererPanel;
-import de.hhn.gameoflife.view.windows.GOLWindow;
+import de.hhn.gameoflife.util.ZoomHandler;
+import de.hhn.gameoflife.view.panels.ImageViewer;
+import de.hhn.gameoflife.view.GOLWindow;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
@@ -19,30 +21,31 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
     private volatile int waitTime;
     private volatile Color aliveColor;
     private volatile Color deadColor;
-    private final GOLWindow window;
-    private final BufferedImageRendererPanel panel;
+    private final ImageViewer viewer;
+    private final BufferedImage image;
     private final GameOfLife gol;
     private final Thread thread;
+    private final ZoomHandler zoomHandler;
 
-    public GOLWindowControl(GOLWindow window, BufferedImageRendererPanel panel, int width, int height) {
-        if (width < 0 || height < 0) {
-            throw new IllegalArgumentException("Width and/or height below 0. Width: " + width + " Height: " + height);
-        }
-        this.window = window;
-        this.panel = panel;
-        waitTime = 0;
+    public GOLWindowControl(GOLWindow window, ImageViewer viewer) {
+        this.viewer = viewer;
+        if (!(viewer.getImage() instanceof BufferedImage))
+            throw new IllegalArgumentException("Viewer is not a viewer of a Buffered Image");
+        image = (BufferedImage) viewer.getImage();
+        zoomHandler = viewer.getZoomHandler();
+        waitTime = 100;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
-        gol = new GameOfLife(width, height);
+        gol = new GameOfLife(image.getWidth(), image.getHeight());
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
                 gol.setAlive(i, j, Math.random() < 0.5);
             }
         }
         updateAllCells();
 
-        panel.addMouseWheelListener(this);
+        viewer.addMouseWheelListener(this);
         window.addKeyListener(this);
 
         thread = new Thread(this);
@@ -53,18 +56,18 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
         for (int i = 0; i < gol.getWidth(); i++)
             for (int j = 0; j < gol.getHeight(); j++)
                 cellChangedEvent(i, j, gol.getAlive(i, j));
-        panel.repaint();
+        viewer.repaint();
     }
 
     public synchronized void golStep() {
         gol.step();
         gol.forEachChange(this);
-        panel.repaint();
+        viewer.repaint();
     }
 
     @Override
     public void cellChangedEvent(int x, int y, boolean alive) {
-        panel.setPixelNoRepaint(x, y, (alive ? aliveColor : deadColor).getRGB());
+        image.setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
     }
 
     @Override
@@ -87,7 +90,7 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-        panel.setZoomDelta(0.1f * mouseWheelEvent.getWheelRotation());
+        zoomHandler.setZoomDelta(0.1f * mouseWheelEvent.getWheelRotation());
     }
 
     @Override
@@ -99,12 +102,12 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
     public void keyPressed(KeyEvent keyEvent) {
         System.out.println(keyEvent.getKeyCode());
         switch (keyEvent.getKeyCode()) {
-            case 107 -> panel.setZoomDelta(.5f);
-            case 109 -> panel.setZoomDelta(-.5f);
-            case 37 -> panel.setShiftDelta(-0.1f / panel.getZoom(), 0);
-            case 38 -> panel.setShiftDelta(0, -0.1f / panel.getZoom());
-            case 39 -> panel.setShiftDelta(0.1f / panel.getZoom(), 0);
-            case 40 -> panel.setShiftDelta(0, 0.1f / panel.getZoom());
+            case 107 -> zoomHandler.setZoomDelta(.5f);
+            case 109 -> zoomHandler.setZoomDelta(-.5f);
+            case 37 -> zoomHandler.setShiftDeltaRelative(-0.1f, 0);
+            case 38 -> zoomHandler.setShiftDeltaRelative(0, -0.1f);
+            case 39 -> zoomHandler.setShiftDeltaRelative(0.1f, 0);
+            case 40 -> zoomHandler.setShiftDeltaRelative(0, 0.1f);
         }
     }
 

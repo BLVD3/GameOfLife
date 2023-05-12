@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.view.windows;
+package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.GameOfLifeApplication;
 import de.hhn.gameoflife.util.GOLMode;

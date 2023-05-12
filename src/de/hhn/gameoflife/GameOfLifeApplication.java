@@ -2,7 +2,7 @@ package de.hhn.gameoflife;
 
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.util.GOLModeChangedListener;
-import de.hhn.gameoflife.view.windows.MainWindow;
+import de.hhn.gameoflife.view.MainWindow;
 
 import javax.swing.*;
 import java.util.ArrayList;

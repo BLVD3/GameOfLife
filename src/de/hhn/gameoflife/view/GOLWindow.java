@@ -1,15 +1,15 @@
-package de.hhn.gameoflife.view.windows;
+package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.control.GOLWindowControl;
-import de.hhn.gameoflife.view.panels.BufferedImageRendererPanel;
-import de.hhn.gameoflife.view.panels.BufferedImageViewer;
+import de.hhn.gameoflife.view.panels.ImageViewer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GOLWindow extends JInternalFrame {
     private GOLWindowControl control;
-    private final BufferedImageRendererPanel simulationPanel;
+    private final ImageViewer viewer;
 
     public GOLWindow(int width, int height, Container container) {
         if (width < 0 || height < 0) {
@@ -21,9 +21,10 @@ public class GOLWindow extends JInternalFrame {
         while (width * sizeFactor > container.getWidth())
             sizeFactor *= .5f;
         setLayout(new BorderLayout());
-        simulationPanel = new BufferedImageRendererPanel(width, height);
-        control = new GOLWindowControl(this, simulationPanel, width, height);
-        add(new BufferedImageViewer(width, height), BorderLayout.CENTER);  //!!
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        viewer = new ImageViewer(bufferedImage);
+        control = new GOLWindowControl(this, viewer);
+        add(viewer, BorderLayout.CENTER);  //!!
         getContentPane().setPreferredSize(new Dimension(Math.max((int)(width * sizeFactor), 300), (int)(height * sizeFactor)));
         pack();
         setTitle(GOLWindowControl.getNextName());

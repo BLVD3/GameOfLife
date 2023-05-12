@@ -1,6 +1,8 @@
-package de.hhn.gameoflife.view.panels;
+package de.hhn.gameoflife.util;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Class to make zooming in on a Buffered Image easier
@@ -8,7 +10,7 @@ import java.awt.*;
  * @author Nico Vogel
  * @version 1.0
  */
-public class BufferedImageZoom {
+public class ZoomHandler {
     private final Rectangle renderRect; // The Bounds of the Render Target
     private final Dimension imageSize; // The Size of the Buffered Image
     private final Rectangle imagePosition; // The Position of the Image after Zooming/Shifting
@@ -19,14 +21,17 @@ public class BufferedImageZoom {
     private Rectangle sourceRect; // Area on the image that should get Rendered
     private Rectangle targetRect; // Area on the Target Container that will be rendered on
 
+    private final HashSet<ZoomChangedListener> listeners;
+
     /**
      * @param targetSize Size of the Container that will be rendered on
      * @param imageSize <b>!Resolution!</b> of the Image that will be Rendered
      */
-    public BufferedImageZoom(Dimension targetSize, Dimension imageSize) {
+    public ZoomHandler(Dimension targetSize, Dimension imageSize) {
         renderRect = new Rectangle(targetSize);
         this.imageSize = (Dimension)imageSize.clone();
         imagePosition = new Rectangle();
+        listeners = new HashSet<>(1);
         setZoom(1f);
         setShift(.5f, .5f);
         calculateAll();
@@ -75,10 +80,19 @@ public class BufferedImageZoom {
      * Set both values to 0.5 to make it centered.
      */
     public void setShift(float x, float y) {
-        xShift = x;
-        yShift = y;
+        xShift = Math.max(Math.min(x, 1f), 0f);
+        yShift = Math.max(Math.min(y, 1f), 0f);
         calculateImagePosition();
         calculateRenderBounds();
+    }
+
+
+    public void setShiftDeltaRelative(float x, float y) {
+        setShift(xShift + x / zoomLevel, yShift + y / zoomLevel);
+    }
+
+    public void setShiftDeltaAbsolute(float x, float y) {
+        setShift(xShift + x, yShift + y);
     }
 
     /**
@@ -91,6 +105,10 @@ public class BufferedImageZoom {
         }
         zoomLevel = Math.max(level, 1f);
         calculateAll();
+    }
+
+    public void setZoomDelta(float delta) {
+        setZoom(zoomLevel + delta);
     }
 
     /**
@@ -154,5 +172,20 @@ public class BufferedImageZoom {
         sourceRect.y = Math.round((sourceRect.y - imagePosition.y) / scale);
         sourceRect.height = Math.round(sourceRect.height / scale);
         sourceRect.width = Math.round(sourceRect.width / scale);
+    }
+
+    public void addListener(ZoomChangedListener listener) {
+        if (listeners.contains(listener))
+            return;
+        listeners.add(listener);
+    }
+
+    public void removeListener(ZoomChangedListener listener) {
+        listeners.remove(listener);
+    }
+
+
+    private void fireZoomChangedEvent() {
+        listeners.forEach(ZoomChangedListener::zoomChanged);
     }
 }
