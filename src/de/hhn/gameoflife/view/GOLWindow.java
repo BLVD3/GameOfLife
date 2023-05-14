@@ -24,11 +24,13 @@ public class GOLWindow extends JInternalFrame {
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         viewer = new ImageViewer(bufferedImage);
         control = new GOLWindowControl(this, viewer);
-        add(viewer, BorderLayout.CENTER);  //!!
+        add(viewer, BorderLayout.CENTER);
         getContentPane().setPreferredSize(new Dimension(Math.max((int)(width * sizeFactor), 300), (int)(height * sizeFactor)));
         pack();
         setTitle(GOLWindowControl.getNextName());
         setClosable(true);
+        setFrameIcon(null);
+        setMaximizable(true);
         setIconifiable(true);
         setResizable(true);
         setOpaque(true);

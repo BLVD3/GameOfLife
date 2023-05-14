@@ -4,6 +4,8 @@ import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
 
 public class ImageViewer extends JPanel {
     private final ImageRendererPanel panel;
@@ -50,5 +52,9 @@ public class ImageViewer extends JPanel {
 
     public ZoomHandler getZoomHandler() {
         return panel.getZoomHandler();
+    }
+
+    public void addImageMouseListener(MouseListener listener) {
+        panel.addMouseListener(listener);
     }
 }

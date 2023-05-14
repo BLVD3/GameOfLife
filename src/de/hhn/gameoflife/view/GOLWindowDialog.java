@@ -15,6 +15,7 @@ public class GOLWindowDialog extends JInternalFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setTitle("Neues Fenster");
         setLayout(null);
+        setFrameIcon(null);
         getContentPane().setPreferredSize(new Dimension(180, 111));
         pack();
         setResizable(false);
