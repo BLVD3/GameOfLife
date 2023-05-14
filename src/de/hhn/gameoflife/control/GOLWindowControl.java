@@ -7,24 +7,23 @@ import de.hhn.gameoflife.util.ZoomHandler;
 import de.hhn.gameoflife.view.panels.ImageViewer;
 import de.hhn.gameoflife.view.GOLWindow;
 
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
-public class GOLWindowControl implements Runnable, GOLCellChangedListener, MouseWheelListener, KeyListener {
+public class GOLWindowControl implements Runnable, GOLCellChangedListener, MouseWheelListener, KeyListener, MouseListener, InternalFrameListener {
     private static int NEXT_ID = 0;
     private volatile int waitTime;
+    private volatile boolean threadStop;
     private volatile Color aliveColor;
     private volatile Color deadColor;
     private final ImageViewer viewer;
     private final BufferedImage image;
     private final GameOfLife gol;
-    private final Thread thread;
     private final ZoomHandler zoomHandler;
 
     public GOLWindowControl(GOLWindow window, ImageViewer viewer) {
@@ -37,18 +36,16 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GameOfLife(image.getWidth(), image.getHeight());
+        threadStop = false;
 
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                gol.setAlive(i, j, Math.random() < 0.5);
-            }
-        }
         updateAllCells();
 
         viewer.addMouseWheelListener(this);
         window.addKeyListener(this);
+        window.addInternalFrameListener(this);
+        viewer.addImageMouseListener(this);
 
-        thread = new Thread(this);
+        Thread thread = new Thread(this);
         thread.start();
     }
 
@@ -73,7 +70,7 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
     @Override
     public void run() {
         long start;
-        while (true) {
+        while (!threadStop) {
             if (getMode() == GOLMode.RUN) {
                 start = System.currentTimeMillis();
                 golStep();
@@ -114,4 +111,50 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
     public void keyReleased(KeyEvent keyEvent) {
 
     }
+
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        Point imageCoordinate = zoomHandler.transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
+        if (imageCoordinate == null)
+            return;
+        gol.setAlive(imageCoordinate.x, imageCoordinate.y, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+        image.setRGB(imageCoordinate.x, imageCoordinate.y, (gol.getAlive(imageCoordinate.x, imageCoordinate.y) ? aliveColor : deadColor).getRGB());
+        viewer.repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) { }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) { }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) { }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) { }
+
+
+    @Override
+    public void internalFrameOpened(InternalFrameEvent internalFrameEvent) { }
+
+    @Override
+    public void internalFrameClosing(InternalFrameEvent internalFrameEvent) {
+        threadStop = true;
+    }
+
+    @Override
+    public void internalFrameClosed(InternalFrameEvent internalFrameEvent) { }
+
+    @Override
+    public void internalFrameIconified(InternalFrameEvent internalFrameEvent) { }
+
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent internalFrameEvent) { }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent internalFrameEvent) { }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent internalFrameEvent) { }
 }

@@ -200,9 +200,11 @@ public class ZoomHandler {
     }
 
     public Point transformToImageCoordinate(int x, int y) {
+        if (!targetRect.contains(new Point(x, y)))
+            return null;
         Point val = new Point();
         val.x = (int)((x - imagePosition.x) / scale);
-        val.y = (int)((x - imagePosition.x) / scale);
+        val.y = (int)((y - imagePosition.y) / scale);
         return val;
     }
 }
