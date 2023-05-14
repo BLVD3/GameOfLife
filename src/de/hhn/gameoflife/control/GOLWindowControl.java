@@ -87,7 +87,10 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-        zoomHandler.setZoomDelta(0.1f * mouseWheelEvent.getWheelRotation());
+        if (mouseWheelEvent.getWheelRotation() > 0)
+            zoomHandler.scaleZoom(1.25);
+        else
+            zoomHandler.scaleZoom(0.8);
     }
 
     @Override

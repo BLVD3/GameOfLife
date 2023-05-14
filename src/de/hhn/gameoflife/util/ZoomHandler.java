@@ -107,6 +107,10 @@ public class ZoomHandler {
         setZoom(zoomLevel + delta);
     }
 
+    public void scaleZoom(double factor) {
+        setZoom(zoomLevel * factor);
+    }
+
     /**
      * Sets zoom level to 1 and centers the image
      */
