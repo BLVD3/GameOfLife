@@ -15,27 +15,29 @@ import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
-public class GOLWindowControl implements Runnable, GOLCellChangedListener, MouseWheelListener, KeyListener, MouseListener, InternalFrameListener {
+public class GOLWindowControl implements
+        Runnable,
+        GOLCellChangedListener,
+        MouseWheelListener,
+        KeyListener,
+        MouseListener,
+        InternalFrameListener {
     private static int NEXT_ID = 0;
     private volatile int waitTime;
     private volatile boolean threadStop;
     private volatile Color aliveColor;
     private volatile Color deadColor;
     private final ImageViewer viewer;
-    private final BufferedImage image;
     private final GameOfLife gol;
     private final ZoomHandler zoomHandler;
 
-    public GOLWindowControl(GOLWindow window, ImageViewer viewer) {
+    public GOLWindowControl(GOLWindow window, ImageViewer viewer, int width, int height) {
         this.viewer = viewer;
-        if (!(viewer.getImage() instanceof BufferedImage))
-            throw new IllegalArgumentException("Viewer is not a viewer of a Buffered Image");
-        image = (BufferedImage) viewer.getImage();
         zoomHandler = viewer.getZoomHandler();
         waitTime = 100;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
-        gol = new GameOfLife(image.getWidth(), image.getHeight());
+        gol = new GameOfLife(width, height);
         threadStop = false;
 
         updateAllCells();
@@ -64,7 +66,7 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
 
     @Override
     public void cellChangedEvent(int x, int y, boolean alive) {
-        image.setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
+        viewer.getImage().setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
     }
 
     @Override
@@ -121,7 +123,10 @@ public class GOLWindowControl implements Runnable, GOLCellChangedListener, Mouse
         if (imageCoordinate == null)
             return;
         gol.setAlive(imageCoordinate.x, imageCoordinate.y, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
-        image.setRGB(imageCoordinate.x, imageCoordinate.y, (gol.getAlive(imageCoordinate.x, imageCoordinate.y) ? aliveColor : deadColor).getRGB());
+        viewer.getImage().setRGB(
+                imageCoordinate.x,
+                imageCoordinate.y,
+                (gol.getAlive(imageCoordinate.x, imageCoordinate.y) ? aliveColor : deadColor).getRGB());
         viewer.repaint();
     }
 

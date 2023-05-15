@@ -2,7 +2,6 @@ package de.hhn.gameoflife.util;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -62,6 +61,13 @@ public class ZoomHandler {
     }
 
     /**
+     * @return the factor with which the image was resized
+     */
+    public double getScale() {
+        return scale;
+    }
+
+    /**
      * Sets the new Size of the RenderTarget <br/>
      * Also recalculates rendering bounds
      */
@@ -72,7 +78,7 @@ public class ZoomHandler {
     }
 
     /**
-     * Sets the shifted position of the image.<br/>
+     * Sets the position.<br/>
      * Set both values to 0.5 to make it centered.
      */
     public void setShift(double x, double y) {
@@ -83,10 +89,20 @@ public class ZoomHandler {
     }
 
 
+    /**
+     * Moves the image from its current position. The distance is relative to the screen.
+     * @param x Horizontal change
+     * @param y Vertical change
+     */
     public void setShiftDeltaRelative(double x, double y) {
         setShift(xShift + x / zoomLevel, yShift + y / zoomLevel);
     }
 
+    /**
+     * Moves the image from its current position. The distance is not relative to the screen.
+     * @param x Horizontal change
+     * @param y Vertical change
+     */
     public void setShiftDeltaAbsolute(double x, double y) {
         setShift(xShift + x, yShift + y);
     }
@@ -122,18 +138,6 @@ public class ZoomHandler {
     }
 
     /**
-     * Moves the image from its current position
-     * @param x Horizontal Movement
-     * @param y Vertical Movement
-     */
-    public void moveImage(double x, double y) {
-        xShift = Math.max(Math.min(x + xShift, 1), 0);
-        yShift = Math.max(Math.min(y + yShift, 1), 0);
-        calculateImagePosition();
-        calculateRenderBounds();
-    }
-
-    /**
      * Recalculates everything<br/>
      * Use sparingly because it uses a lot of division
      */
@@ -153,6 +157,7 @@ public class ZoomHandler {
         scale *= zoomLevel;
         imagePosition.width = imageSize.width * scale;
         imagePosition.height = imageSize.height * scale;
+        fireScaleChangedEvent();
     }
 
     /**
@@ -171,10 +176,6 @@ public class ZoomHandler {
         Rectangle2D.Double visibleImageArea = (Rectangle2D.Double) intersection.clone();
         visibleImageArea.x -= imagePosition.x;
         visibleImageArea.y -= imagePosition.y;
-        visibleImageArea.x /= scale;
-        visibleImageArea.y /= scale;
-        visibleImageArea.width /= scale;
-        visibleImageArea.height /= scale;
         targetRect.setBounds(
                 (int)Math.round(intersection.x),
                 (int)Math.round(intersection.y),
@@ -200,7 +201,11 @@ public class ZoomHandler {
 
 
     private void fireZoomChangedEvent() {
-        listeners.forEach(ZoomChangedListener::zoomChanged);
+        listeners.forEach(ZoomChangedListener::positionChanged);
+    }
+
+    private void fireScaleChangedEvent() {
+        listeners.forEach(ZoomChangedListener::scaleChanged);
     }
 
     public Point transformToImageCoordinate(int x, int y) {

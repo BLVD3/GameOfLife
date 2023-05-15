@@ -23,7 +23,7 @@ public class GOLWindow extends JInternalFrame {
         setLayout(new BorderLayout());
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         viewer = new ImageViewer(bufferedImage);
-        control = new GOLWindowControl(this, viewer);
+        control = new GOLWindowControl(this, viewer, width, height);
         add(viewer, BorderLayout.CENTER);
         getContentPane().setPreferredSize(new Dimension(Math.max((int)(width * sizeFactor), 300), (int)(height * sizeFactor)));
         pack();

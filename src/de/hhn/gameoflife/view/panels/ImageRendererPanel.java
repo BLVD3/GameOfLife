@@ -7,34 +7,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 
 /**
  * Renders a BufferedImage on itself. Aspect ratio is considered during rendering.<br/>
  * Panel is also able to zoom into the image.
  */
 public class ImageRendererPanel extends JPanel implements ComponentListener, ZoomChangedListener {
-    private final Image image; // Image which will be drawn on the Panel
+    private final BufferedImage image; // Image which will be drawn on the Panel
     private final ZoomHandler zoom; // Helper class to calculate Size, Zoom and Position of the Image
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 
-    public ImageRendererPanel(Image image) {
+    public ImageRendererPanel(BufferedImage image) {
         this.image = image;
         zoom = new ZoomHandler(new Dimension(getWidth(), getHeight()), new Dimension(image.getWidth(null), image.getHeight(null)));
-
         zoom.addListener(this);
         addComponentListener(this);
     }
 
     @Override
     public void paint(Graphics g) {
+        double scale = zoom.getScale();
+        Image scaledImage = image.getScaledInstance((int) (image.getWidth() * scale),
+                (int) (image.getHeight() * scale),
+                Image.SCALE_FAST);
         g.setColor(new Color(0x333333));
         g.fillRect(0, 0, getWidth(), getHeight());
         Rectangle source = zoom.getSourceRect();
         Rectangle target = zoom.getTargetRect();
-        g.drawImage(image,
+        g.drawImage(scaledImage,
                 target.x, target.y,
                 target.x + target.width,
                 target.y + target.height,
@@ -60,8 +64,13 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
     public void componentHidden(ComponentEvent e) { }
 
     @Override
-    public void zoomChanged() {
+    public void positionChanged() {
         repaint();
+    }
+
+    @Override
+    public void scaleChanged() {
+
     }
 
     public ZoomHandler getZoomHandler() {

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class ImageViewer extends JPanel {
     private final ImageRendererPanel panel;
@@ -13,7 +14,7 @@ public class ImageViewer extends JPanel {
     private final JScrollBar scrollBarV;
     private final JScrollBar scrollBarH;
 
-    public ImageViewer(Image image) {
+    public ImageViewer(BufferedImage image) {
         setLayout(new BorderLayout());
         panel = new ImageRendererPanel(image);
         scrollBarH = new JScrollBar(Adjustable.HORIZONTAL);
@@ -46,7 +47,7 @@ public class ImageViewer extends JPanel {
         add(bottomPanel, BorderLayout.PAGE_END);
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return panel.getImage();
     }
 
