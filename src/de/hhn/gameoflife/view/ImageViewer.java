@@ -1,14 +1,11 @@
-package de.hhn.gameoflife.view.panels;
+package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
-import java.util.concurrent.Callable;
 
 public class ImageViewer extends JInternalFrame implements MouseWheelListener {
     private final ImageRendererPanel panel;

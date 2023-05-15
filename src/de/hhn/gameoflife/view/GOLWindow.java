@@ -1,12 +1,8 @@
 package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.control.GOLWindowControl;
-import de.hhn.gameoflife.view.panels.ImageViewer;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class GOLWindow extends ImageViewer {

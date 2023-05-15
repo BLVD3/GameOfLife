@@ -3,15 +3,12 @@ package de.hhn.gameoflife.control;
 import de.hhn.gameoflife.model.GameOfLife;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
-import de.hhn.gameoflife.util.ZoomHandler;
-import de.hhn.gameoflife.view.panels.ImageViewer;
 import de.hhn.gameoflife.view.GOLWindow;
 
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 

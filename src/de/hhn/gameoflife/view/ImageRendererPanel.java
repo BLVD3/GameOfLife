@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.view.panels;
+package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.util.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
