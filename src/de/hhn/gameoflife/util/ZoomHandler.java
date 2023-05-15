@@ -17,10 +17,6 @@ public class ZoomHandler {
     private double scale; // The Scale of the image: imageSize -> imagePosition.size
     private double zoomLevel; // The Target zoom level
     private double xShift, yShift; // The Position of the Image -> 0, 0 top Left corner centered; 1, 1 bottom right
-
-    private final Rectangle sourceRect; // Area on the image that should get Rendered
-    private final Rectangle targetRect; // Area on the Target Container that will be rendered on
-
     private final HashSet<ZoomChangedListener> listeners;
 
     /**
@@ -32,25 +28,9 @@ public class ZoomHandler {
         this.imageSize = (Dimension)imageSize.clone();
         imagePosition = new Rectangle2D.Double();
         listeners = new HashSet<>(1);
-        targetRect = new Rectangle();
-        sourceRect = new Rectangle();
         setZoom(1.);
         setShift(.5, .5);
         calculateAll();
-    }
-
-    /**
-     * @return the area of the BufferedImage that shall be rendered
-     */
-    public Rectangle getSourceRect() {
-        return sourceRect;
-    }
-
-    /**
-     * @return the area on the Container that shall be rendered on
-     */
-    public Rectangle getTargetRect() {
-        return targetRect;
     }
 
     /**
@@ -65,6 +45,10 @@ public class ZoomHandler {
      */
     public double getScale() {
         return scale;
+    }
+
+    public Rectangle2D.Double getImagePosition() {
+        return imagePosition;
     }
 
     /**
@@ -85,7 +69,6 @@ public class ZoomHandler {
         xShift = Math.max(Math.min(x, 1.), 0.);
         yShift = Math.max(Math.min(y, 1.), 0.);
         calculateImagePosition();
-        calculateRenderBounds();
     }
 
 
@@ -144,7 +127,6 @@ public class ZoomHandler {
     private void calculateAll() {
         calculateImageScale();
         calculateImagePosition();
-        calculateRenderBounds();
     }
 
     /**
@@ -166,27 +148,7 @@ public class ZoomHandler {
     private void calculateImagePosition() {
         imagePosition.x = renderRect.width / 2.f - imagePosition.width * xShift;
         imagePosition.y = renderRect.height / 2.f - imagePosition.height * yShift;
-    }
-
-    /**
-     * Calculates the Intersections between the pseudo image and the rendering target
-     */
-    private void calculateRenderBounds() {
-        Rectangle2D.Double intersection = (Rectangle2D.Double) renderRect.createIntersection(imagePosition);
-        Rectangle2D.Double visibleImageArea = (Rectangle2D.Double) intersection.clone();
-        visibleImageArea.x -= imagePosition.x;
-        visibleImageArea.y -= imagePosition.y;
-        targetRect.setBounds(
-                (int)Math.round(intersection.x),
-                (int)Math.round(intersection.y),
-                (int)Math.round(intersection.width),
-                (int)Math.round(intersection.height));
-        sourceRect.setBounds(
-                (int)Math.round(visibleImageArea.x),
-                (int)Math.round(visibleImageArea.y),
-                (int)Math.round(visibleImageArea.width),
-                (int)Math.round(visibleImageArea.height));
-        fireZoomChangedEvent();
+        firePositionChangedEvent();
     }
 
     public void addListener(ZoomChangedListener listener) {
@@ -200,7 +162,7 @@ public class ZoomHandler {
     }
 
 
-    private void fireZoomChangedEvent() {
+    private void firePositionChangedEvent() {
         listeners.forEach(ZoomChangedListener::positionChanged);
     }
 
@@ -209,7 +171,7 @@ public class ZoomHandler {
     }
 
     public Point transformToImageCoordinate(int x, int y) {
-        if (!targetRect.contains(new Point(x, y)))
+        if (!imagePosition.contains(new Point(x, y)))
             return null;
         Point val = new Point();
         val.x = (int)((x - imagePosition.x) / scale);

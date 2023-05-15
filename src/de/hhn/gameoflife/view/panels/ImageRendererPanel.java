@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,21 +31,15 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
 
     @Override
     public void paint(Graphics g) {
-        double scale = zoom.getScale();
-        Image scaledImage = image.getScaledInstance((int) (image.getWidth() * scale),
-                (int) (image.getHeight() * scale),
-                Image.SCALE_FAST);
         g.setColor(new Color(0x333333));
         g.fillRect(0, 0, getWidth(), getHeight());
-        Rectangle source = zoom.getSourceRect();
-        Rectangle target = zoom.getTargetRect();
-        g.drawImage(scaledImage,
-                target.x, target.y,
-                target.x + target.width,
-                target.y + target.height,
-                source.x, source.y,
-                source.x + source.width,
-                source.y + source.height,
+        Rectangle2D.Double rect =  zoom.getImagePosition();
+        g.drawImage(image, (int)(rect.x), (int)(rect.y),
+                (int)(rect.x + rect.width),
+                (int)(rect.y + rect.height),
+                0, 0,
+                image.getWidth(),
+                image.getHeight(),
                 null);
     }
 
