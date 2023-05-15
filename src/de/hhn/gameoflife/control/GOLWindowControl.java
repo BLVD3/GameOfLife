@@ -18,8 +18,6 @@ import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 public class GOLWindowControl implements
         Runnable,
         GOLCellChangedListener,
-        MouseWheelListener,
-        KeyListener,
         MouseListener,
         InternalFrameListener {
     private static int NEXT_ID = 0;
@@ -29,11 +27,9 @@ public class GOLWindowControl implements
     private volatile Color deadColor;
     private final ImageViewer viewer;
     private final GameOfLife gol;
-    private final ZoomHandler zoomHandler;
 
     public GOLWindowControl(GOLWindow window, ImageViewer viewer, int width, int height) {
         this.viewer = viewer;
-        zoomHandler = viewer.getZoomHandler();
         waitTime = 100;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
@@ -42,8 +38,6 @@ public class GOLWindowControl implements
 
         updateAllCells();
 
-        viewer.addMouseWheelListener(this);
-        window.addKeyListener(this);
         window.addInternalFrameListener(this);
         viewer.addImageMouseListener(this);
 
@@ -88,38 +82,8 @@ public class GOLWindowControl implements
     }
 
     @Override
-    public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-        if (mouseWheelEvent.getWheelRotation() > 0)
-            zoomHandler.scaleZoom(1.25);
-        else
-            zoomHandler.scaleZoom(0.8);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        switch (keyEvent.getKeyCode()) {
-            case 107 -> zoomHandler.setZoomDelta(.5f);
-            case 109 -> zoomHandler.setZoomDelta(-.5f);
-            case 37 -> zoomHandler.setShiftDeltaRelative(-0.1f, 0);
-            case 38 -> zoomHandler.setShiftDeltaRelative(0, -0.1f);
-            case 39 -> zoomHandler.setShiftDeltaRelative(0.1f, 0);
-            case 40 -> zoomHandler.setShiftDeltaRelative(0, 0.1f);
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-
-    }
-
-    @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        Point imageCoordinate = zoomHandler.transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
+        Point imageCoordinate = viewer.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
         if (imageCoordinate == null)
             return;
         gol.setAlive(imageCoordinate.x, imageCoordinate.y, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
