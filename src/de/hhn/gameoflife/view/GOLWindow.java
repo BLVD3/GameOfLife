@@ -5,6 +5,8 @@ import de.hhn.gameoflife.view.panels.ImageViewer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class GOLWindow extends JInternalFrame {
@@ -15,10 +17,10 @@ public class GOLWindow extends JInternalFrame {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Width and/or height below 0. Width: " + width + " Height: " + height);
         }
-        float sizeFactor = 16;
-        while (height * sizeFactor > container.getHeight())
+        float sizeFactor = 64;
+        while ((int)(height * sizeFactor) > container.getHeight() * 4 / 5)
             sizeFactor *= .5f;
-        while (width * sizeFactor > container.getWidth())
+        while ((int)(width * sizeFactor) > container.getWidth() * 4 / 5)
             sizeFactor *= .5f;
         setLayout(new BorderLayout());
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
