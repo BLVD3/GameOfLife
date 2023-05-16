@@ -5,6 +5,9 @@ import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.view.GOLWindow;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import java.awt.*;
@@ -18,7 +21,7 @@ public class GOLWindowControl implements
         MouseListener,
         InternalFrameListener {
     private static int NEXT_ID = 0;
-    private volatile int waitTime;
+    private volatile long waitTime;
     private volatile boolean threadStop;
     private volatile Color aliveColor;
     private volatile Color deadColor;
@@ -26,7 +29,7 @@ public class GOLWindowControl implements
     private final GOLWindow window;
 
     public GOLWindowControl(GOLWindow window, int width, int height) {
-        waitTime = 100;
+        waitTime = 1000000000L / 10L;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GameOfLife(width, height);
@@ -65,9 +68,9 @@ public class GOLWindowControl implements
         long start;
         while (!threadStop) {
             if (getMode() == GOLMode.RUN) {
-                start = System.currentTimeMillis();
+                start = System.nanoTime();
                 golStep();
-                while (System.currentTimeMillis() - start < waitTime)
+                while (System.nanoTime() - start < waitTime)
                     Thread.onSpinWait();
             } else
                 Thread.onSpinWait();
@@ -94,6 +97,23 @@ public class GOLWindowControl implements
     @Override
     public void internalFrameClosing(InternalFrameEvent internalFrameEvent) {
         threadStop = true;
+    }
+
+    public void stepButtonPressed() {
+        if (getMode() != GOLMode.RUN) {
+            golStep();
+        }
+    }
+
+    public void fpsSliderChanged(ChangeEvent e) {
+        if (e.getSource() instanceof JSlider slider) {
+            int fpsTarget = (int)Math.round(Math.pow(Math.pow(144, 1./100), slider.getValue()));
+            if (fpsTarget == 0)
+                waitTime = 0;
+            else
+                waitTime = 1000000000L / fpsTarget;
+            window.setSpeedLabel(String.valueOf(fpsTarget));
+        }
     }
 
     //#region unused events

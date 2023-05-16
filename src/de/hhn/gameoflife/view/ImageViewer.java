@@ -1,13 +1,16 @@
 package de.hhn.gameoflife.view;
 
+import de.hhn.gameoflife.util.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-public class ImageViewer extends JInternalFrame implements MouseWheelListener, KeyListener {
+public class ImageViewer extends JInternalFrame implements MouseWheelListener, KeyListener, ZoomChangedListener, AdjustmentListener {
     private final ImageRendererPanel panel;
     private final JSlider zoomSlider;
     private final JScrollBar scrollBarV;
@@ -53,6 +56,7 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
 
         panel.addMouseWheelListener(this);
         addKeyListener(this);
+        getZoomHandler().addListener(this);
 
         pack();
         setClosable(true);
@@ -117,5 +121,29 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
     @Override
     public void keyReleased(KeyEvent keyEvent) {
 
+    }
+
+    @Override
+    public void positionChanged() {
+
+    }
+
+    @Override
+    public void scaleChanged() {
+
+    }
+
+    public void setUpScrollbars() {
+        int prevExtend;
+        int extent = (int)Math.round(100. / getZoomHandler().getZoomLevel() / 2.);
+        scrollBarH.getModel().setMaximum(100 + extent);
+        scrollBarH.getModel().setExtent(extent);
+
+
+    }
+
+    @Override
+    public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
+        System.out.println(adjustmentEvent.getValue());
     }
 }
