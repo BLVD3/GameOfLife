@@ -14,21 +14,14 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
     private final JScrollBar scrollBarH;
 
     public ImageViewer(BufferedImage image, Container container) {
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Hi");
-            }
-        });
         float sizeFactor = 64;
         while ((int)(image.getHeight() * sizeFactor) > container.getHeight() * 4 / 5)
             sizeFactor *= .5f;
         while ((int)(image.getWidth() * sizeFactor) > container.getWidth() * 4 / 5)
             sizeFactor *= .5f;
-        getContentPane().setPreferredSize(new Dimension(Math.max((int)(image.getWidth() * sizeFactor), 300), (int)(image.getHeight() * sizeFactor)));
-        pack();
-        setLayout(new BorderLayout());
         panel = new ImageRendererPanel(image);
+        panel.setPreferredSize(new Dimension(Math.max((int)(image.getWidth() * sizeFactor), 300), (int)(image.getHeight() * sizeFactor)));
+        setLayout(new BorderLayout());
         scrollBarH = new JScrollBar(Adjustable.HORIZONTAL);
         scrollBarV = new JScrollBar(Adjustable.VERTICAL);
         zoomSlider = new JSlider();
@@ -61,6 +54,7 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         panel.addMouseWheelListener(this);
         addKeyListener(this);
 
+        pack();
         setClosable(true);
         setFrameIcon(null);
         setMaximizable(true);
