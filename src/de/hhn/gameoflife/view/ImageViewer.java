@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-public class ImageViewer extends JInternalFrame implements MouseWheelListener {
+public class ImageViewer extends JInternalFrame implements MouseWheelListener, KeyListener {
     private final ImageRendererPanel panel;
     private final JSlider zoomSlider;
     private final JScrollBar scrollBarV;
@@ -59,6 +59,7 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener {
         add(bottomPanel, BorderLayout.PAGE_END);
 
         panel.addMouseWheelListener(this);
+        addKeyListener(this);
 
         setClosable(true);
         setFrameIcon(null);
@@ -81,10 +82,16 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-        if (mouseWheelEvent.getWheelRotation() > 0)
-            getZoomHandler().scaleZoom(1.25);
-        else
-            getZoomHandler().scaleZoom(0.8);
+        if ((mouseWheelEvent.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+            if (mouseWheelEvent.getWheelRotation() > 0)
+                getZoomHandler().scaleZoom(1.25);
+            else
+                getZoomHandler().scaleZoom(0.8);
+        } else if ((mouseWheelEvent.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK) {
+            getZoomHandler().setShiftDeltaRelative(mouseWheelEvent.getWheelRotation() * 0.1, 0);
+        } else {
+            getZoomHandler().setShiftDeltaRelative(0, mouseWheelEvent.getWheelRotation() * 0.1);
+        }
     }
 
     public ZoomHandler getZoomHandler() {
@@ -93,5 +100,28 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener {
 
     public void addImageMouseListener(MouseListener listener) {
         panel.addMouseListener(listener);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        System.out.println(keyEvent.getKeyCode());
+        switch (keyEvent.getKeyCode()) {
+            case 37 -> getZoomHandler().setShiftDeltaRelative(-0.1, 0);
+            case 38 -> getZoomHandler().setShiftDeltaRelative(0, -0.1);
+            case 39 -> getZoomHandler().setShiftDeltaAbsolute(0.1, 0);
+            case 40 -> getZoomHandler().setShiftDeltaAbsolute(0, 0.1);
+            case 107 -> getZoomHandler().scaleZoom(1.5);
+            case 109 -> getZoomHandler().scaleZoom(2./3.);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
     }
 }

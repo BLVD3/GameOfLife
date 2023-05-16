@@ -92,6 +92,13 @@ public class GOLWindowControl implements
     }
 
     @Override
+    public void internalFrameClosing(InternalFrameEvent internalFrameEvent) {
+        threadStop = true;
+    }
+
+    //#region unused events
+
+    @Override
     public void mousePressed(MouseEvent mouseEvent) { }
 
     @Override
@@ -103,14 +110,8 @@ public class GOLWindowControl implements
     @Override
     public void mouseExited(MouseEvent mouseEvent) { }
 
-
     @Override
     public void internalFrameOpened(InternalFrameEvent internalFrameEvent) { }
-
-    @Override
-    public void internalFrameClosing(InternalFrameEvent internalFrameEvent) {
-        threadStop = true;
-    }
 
     @Override
     public void internalFrameClosed(InternalFrameEvent internalFrameEvent) { }
@@ -126,4 +127,5 @@ public class GOLWindowControl implements
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent internalFrameEvent) { }
+    //#endregion
 }
