@@ -1,6 +1,7 @@
 package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GameOfLife;
+import de.hhn.gameoflife.util.FPSChangedListener;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
 import de.hhn.gameoflife.view.GOLWindow;
@@ -19,7 +20,8 @@ public class GOLWindowControl implements
         Runnable,
         GOLCellChangedListener,
         MouseListener,
-        InternalFrameListener {
+        InternalFrameListener,
+        FPSChangedListener {
     private static int NEXT_ID = 0;
     private volatile long waitTime;
     private volatile boolean threadStop;
@@ -30,18 +32,19 @@ public class GOLWindowControl implements
     private final FPSCounter fpsCounter;
 
     public GOLWindowControl(GOLWindow window, int width, int height) {
-        waitTime = 1000000000L / 10L;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GameOfLife(width, height);
         fpsCounter = new FPSCounter();
         threadStop = false;
         this.window = window;
+        calculateFps(10);
 
         updateAllCells();
 
         window.addInternalFrameListener(this);
         window.addImageMouseListener(this);
+        fpsCounter.addListener(this);
 
         Thread thread = new Thread(this);
         thread.start();
@@ -124,11 +127,20 @@ public class GOLWindowControl implements
                 window.setSpeedLabel("∞");
             }
             else {
-                int fpsTarget = (int)Math.round(Math.pow(Math.pow(144, 1./100), slider.getValue()));
-                waitTime = 1000000000L / fpsTarget;
-                window.setSpeedLabel(String.valueOf(fpsTarget));
+                calculateFps(slider.getValue());
             }
         }
+    }
+
+    private void calculateFps(int sliderValue) {
+        int fpsTarget = (int)Math.round(Math.pow(Math.pow(144, 0.01), sliderValue));
+        waitTime = 1000000000L / fpsTarget;
+        window.setSpeedLabel(String.valueOf(fpsTarget));
+    }
+
+    @Override
+    public void fpsChanged(int fps) {
+        window.changeFpsDisplay(fps);
     }
 
     //#region unused events
