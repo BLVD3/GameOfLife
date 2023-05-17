@@ -112,7 +112,7 @@ public class GOLWindowControl implements
                 window.setSpeedLabel("∞");
             }
             else {
-                int fpsTarget = (int)Math.round(Math.pow(Math.pow(240, 1./100), slider.getValue()));
+                int fpsTarget = (int)Math.round(Math.pow(Math.pow(144, 1./100), slider.getValue()));
                 waitTime = 1000000000L / fpsTarget;
                 window.setSpeedLabel(String.valueOf(fpsTarget));
             }
