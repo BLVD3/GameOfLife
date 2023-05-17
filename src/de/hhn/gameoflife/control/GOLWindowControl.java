@@ -27,12 +27,14 @@ public class GOLWindowControl implements
     private volatile Color deadColor;
     private final GameOfLife gol;
     private final GOLWindow window;
+    private final FPSCounter fpsCounter;
 
     public GOLWindowControl(GOLWindow window, int width, int height) {
         waitTime = 1000000000L / 10L;
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GameOfLife(width, height);
+        fpsCounter = new FPSCounter();
         threadStop = false;
         this.window = window;
 
@@ -43,6 +45,15 @@ public class GOLWindowControl implements
 
         Thread thread = new Thread(this);
         thread.start();
+    }
+
+    public void randomizeAllCells() {
+        for (int i = 0; i < gol.getHeight(); i++) {
+            for (int j = 0; j < gol.getWidth(); j++) {
+                gol.setAlive(j, i, Math.random() > 0.5);
+            }
+        }
+        updateAllCells();
     }
 
     public void updateAllCells() {
@@ -70,6 +81,7 @@ public class GOLWindowControl implements
             if (getMode() == GOLMode.RUN) {
                 start = System.nanoTime();
                 golStep();
+                fpsCounter.add();
                 while (System.nanoTime() - start < waitTime)
                     Thread.onSpinWait();
             } else
