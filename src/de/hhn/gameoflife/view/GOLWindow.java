@@ -20,7 +20,7 @@ public class GOLWindow extends ImageViewer {
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         speedSlider = new JSlider();
         speedSlider.setMinimum(0);
-        speedSlider.setMaximum(100);
+        speedSlider.setMaximum(101);
         speedSlider.setValue(10);
         speedSlider.addChangeListener(control::fpsSliderChanged);
         stepButton = new JButton("Schritt");
