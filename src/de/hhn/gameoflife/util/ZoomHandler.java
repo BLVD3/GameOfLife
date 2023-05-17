@@ -47,6 +47,14 @@ public class ZoomHandler {
         return scale;
     }
 
+    public double getXShift() {
+        return xShift;
+    }
+
+    public double getYShift() {
+        return yShift;
+    }
+
     public Rectangle2D.Double getImagePosition() {
         return imagePosition;
     }

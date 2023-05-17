@@ -33,6 +33,10 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         zoomSlider.setMaximum(1000);
         zoomSlider.setValue(0);
 
+        setUpScrollbars();
+        scrollBarH.setValue(50);
+        scrollBarV.setValue(50);
+
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.add(scrollBarV, BorderLayout.EAST);
@@ -57,6 +61,8 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         panel.addMouseWheelListener(this);
         addKeyListener(this);
         getZoomHandler().addListener(this);
+        scrollBarH.addAdjustmentListener(this);
+        scrollBarV.addAdjustmentListener(this);
 
         pack();
         setClosable(true);
@@ -125,25 +131,33 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
 
     @Override
     public void positionChanged() {
-
+        scrollBarH.setValue((int)Math.round(getZoomHandler().getXShift() * 100));
+        scrollBarV.setValue((int)Math.round(getZoomHandler().getYShift() * 100));
     }
 
     @Override
     public void scaleChanged() {
-
+        setUpScrollbars();
     }
 
     public void setUpScrollbars() {
-        int prevExtend;
-        int extent = (int)Math.round(100. / getZoomHandler().getZoomLevel() / 2.);
-        scrollBarH.getModel().setMaximum(100 + extent);
-        scrollBarH.getModel().setExtent(extent);
-
-
+        int prevExtend = scrollBarH.getModel().getExtent();
+        int extent = (int)Math.max(Math.round(100. / getZoomHandler().getZoomLevel()), 1);
+        if (prevExtend > extent) {
+            scrollBarH.getModel().setExtent(extent);
+            scrollBarH.getModel().setMaximum(100 + extent);
+            scrollBarV.getModel().setExtent(extent);
+            scrollBarV.getModel().setMaximum(100 + extent);
+        } else if (prevExtend < extent){
+            scrollBarH.getModel().setMaximum(100 + extent);
+            scrollBarH.getModel().setExtent(extent);
+            scrollBarV.getModel().setMaximum(100 + extent);
+            scrollBarV.getModel().setExtent(extent);
+        }
     }
 
     @Override
     public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
-        System.out.println(adjustmentEvent.getValue());
+        getZoomHandler().setShift(scrollBarH.getValue() / 100., scrollBarV.getValue() / 100.);
     }
 }
