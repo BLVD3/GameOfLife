@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * Panel is also able to zoom into the image.
  */
 public class ImageRendererPanel extends JPanel implements ComponentListener, ZoomChangedListener {
-    private final BufferedImage image; // Image which will be drawn on the Panel
+    private BufferedImage image; // Image which will be drawn on the Panel
     private final ZoomHandler zoom; // Helper class to calculate Size, Zoom and Position of the Image
 
     public BufferedImage getImage() {
@@ -27,6 +27,12 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
         zoom = new ZoomHandler(new Dimension(getWidth(), getHeight()), new Dimension(image.getWidth(null), image.getHeight(null)));
         zoom.addListener(this);
         addComponentListener(this);
+    }
+
+    public void swapImage(BufferedImage image) {
+        this.image = image;
+        zoom.resizeImage(new Dimension(image.getWidth(), image.getHeight()));
+        repaint();
     }
 
     @Override

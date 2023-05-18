@@ -33,6 +33,12 @@ public class ZoomHandler {
         calculateAll();
     }
 
+    public void resizeImage(Dimension size) {
+        imageSize.width = size.width;
+        imageSize.height = size.height;
+        calculateAll();
+    }
+
     /**
      * @return current zoom level
      */
