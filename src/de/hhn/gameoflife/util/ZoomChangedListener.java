@@ -1,7 +1,7 @@
 package de.hhn.gameoflife.util;
 
 public interface ZoomChangedListener {
-    void positionChanged();
+    void positionChanged(double newX, double newY);
 
-    void scaleChanged();
+    void scaleChanged(double newZoom);
 }

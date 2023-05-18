@@ -171,11 +171,11 @@ public class ZoomHandler {
 
 
     private void firePositionChangedEvent() {
-        listeners.forEach(ZoomChangedListener::positionChanged);
+        listeners.forEach(listener -> listener.positionChanged(xShift, yShift));
     }
 
     private void fireScaleChangedEvent() {
-        listeners.forEach(ZoomChangedListener::scaleChanged);
+        listeners.forEach(listener -> listener.scaleChanged(zoomLevel));
     }
 
     public Point transformToImageCoordinate(int x, int y) {

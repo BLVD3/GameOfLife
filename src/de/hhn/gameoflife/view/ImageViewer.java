@@ -4,15 +4,13 @@ import de.hhn.gameoflife.util.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 public class ImageViewer extends JInternalFrame implements MouseWheelListener, KeyListener, ZoomChangedListener, AdjustmentListener {
     private final ImageRendererPanel panel;
-    private final JSlider zoomSlider;
+    private final JLabel zoomLabel;
     private final JScrollBar scrollBarV;
     private final JScrollBar scrollBarH;
 
@@ -27,35 +25,31 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         setLayout(new BorderLayout());
         scrollBarH = new JScrollBar(Adjustable.HORIZONTAL);
         scrollBarV = new JScrollBar(Adjustable.VERTICAL);
-        zoomSlider = new JSlider();
-
-        zoomSlider.setMinimum(0);
-        zoomSlider.setMaximum(1000);
-        zoomSlider.setValue(0);
+        zoomLabel = new JLabel("100%");
 
         setUpScrollbars();
         scrollBarH.setValue(50);
         scrollBarV.setValue(50);
 
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BorderLayout());
-        topPanel.add(scrollBarV, BorderLayout.EAST);
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.add(scrollBarV, BorderLayout.EAST);
         JPanel bottomScrollPanel = new JPanel();
         bottomScrollPanel.setLayout(new BorderLayout());
         bottomScrollPanel.add(scrollBarH, BorderLayout.CENTER);
         JPanel distanceHolder = new JPanel();
         distanceHolder.setPreferredSize(new Dimension(10, 10));
         bottomScrollPanel.add(distanceHolder, BorderLayout.EAST);
-        topPanel.add(bottomScrollPanel, BorderLayout.SOUTH);
-        topPanel.add(panel, BorderLayout.CENTER);
+        centerPanel.add(bottomScrollPanel, BorderLayout.SOUTH);
+        centerPanel.add(panel, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.add(new JButton("-"));
-        bottomPanel.add(zoomSlider);
+        bottomPanel.add(zoomLabel);
         bottomPanel.add(new JButton("+"));
 
-        add(topPanel, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.PAGE_END);
 
         panel.addMouseWheelListener(this);
@@ -130,14 +124,15 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
     }
 
     @Override
-    public void positionChanged() {
-        scrollBarH.setValue((int)Math.round(getZoomHandler().getXShift() * 100));
-        scrollBarV.setValue((int)Math.round(getZoomHandler().getYShift() * 100));
+    public void positionChanged(double newX, double newY) {
+        scrollBarH.setValue((int)Math.round(newX * 100));
+        scrollBarV.setValue((int)Math.round(newY * 100));
     }
 
     @Override
-    public void scaleChanged() {
+    public void scaleChanged(double newZoom) {
         setUpScrollbars();
+        zoomLabel.setText((int)(newZoom * 100) + "%");
     }
 
     public void setUpScrollbars() {

@@ -144,7 +144,6 @@ public class GOLWindowControl implements
     }
 
     //#region unused events
-
     @Override
     public void mousePressed(MouseEvent mouseEvent) { }
 

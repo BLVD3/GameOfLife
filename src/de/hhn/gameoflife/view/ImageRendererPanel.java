@@ -59,14 +59,12 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
     public void componentHidden(ComponentEvent e) { }
 
     @Override
-    public void positionChanged() {
+    public void positionChanged(double newX, double newY) {
         repaint();
     }
 
     @Override
-    public void scaleChanged() {
-
-    }
+    public void scaleChanged(double newZoom) { }
 
     public ZoomHandler getZoomHandler() {
         return zoom;
