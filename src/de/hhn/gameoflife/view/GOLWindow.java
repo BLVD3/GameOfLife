@@ -9,10 +9,9 @@ import java.awt.image.BufferedImage;
 
 public class GOLWindow extends ImageViewer {
     private GOLWindowControl control;
-    private JSlider speedSlider;
-    private JLabel speedLabel;
-    private JButton stepButton;
-    private JLabel fpsLabel;
+    private final JSlider speedSlider;
+    private final JLabel speedLabel;
+    private final JLabel fpsLabel;
 
     public GOLWindow(int width, int height, Container container) {
         super(new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB), container);
@@ -22,7 +21,7 @@ public class GOLWindow extends ImageViewer {
         speedSlider.setMinimum(0);
         speedSlider.setMaximum(101);
         speedSlider.setValue(10);
-        stepButton = new JButton("Schritt");
+        JButton stepButton = new JButton("Schritt");
         speedLabel = new JLabel("2");
         speedLabel.setForeground(new Color(140, 140, 140));
         fpsLabel = new JLabel("fps: 0");
