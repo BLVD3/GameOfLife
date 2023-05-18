@@ -59,6 +59,15 @@ public class GOLWindowControl implements
         updateAllCells();
     }
 
+    public void clear() {
+        for (int i = 0; i < gol.getHeight(); i++) {
+            for (int j = 0; j < gol.getWidth(); j++) {
+                gol.setAlive(j, i, false);
+            }
+        }
+        updateAllCells();
+    }
+
     public void updateAllCells() {
         for (int i = 0; i < gol.getWidth(); i++)
             for (int j = 0; j < gol.getHeight(); j++)
