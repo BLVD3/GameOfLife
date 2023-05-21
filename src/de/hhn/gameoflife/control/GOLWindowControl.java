@@ -1,6 +1,6 @@
 package de.hhn.gameoflife.control;
 
-import de.hhn.gameoflife.model.GameOfLife;
+import de.hhn.gameoflife.model.GOLSimulation;
 import de.hhn.gameoflife.util.FPSChangedListener;
 import de.hhn.gameoflife.util.GOLCellChangedListener;
 import de.hhn.gameoflife.util.GOLMode;
@@ -8,7 +8,6 @@ import de.hhn.gameoflife.view.GOLWindow;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import java.awt.*;
@@ -27,14 +26,14 @@ public class GOLWindowControl implements
     private volatile boolean threadStop;
     private volatile Color aliveColor;
     private volatile Color deadColor;
-    private final GameOfLife gol;
+    private final GOLSimulation gol;
     private final GOLWindow window;
     private final FPSCounter fpsCounter;
 
     public GOLWindowControl(GOLWindow window, int width, int height) {
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
-        gol = new GameOfLife(width, height);
+        gol = new GOLSimulation(width, height);
         fpsCounter = new FPSCounter();
         threadStop = false;
         this.window = window;
