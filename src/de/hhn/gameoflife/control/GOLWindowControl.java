@@ -109,12 +109,25 @@ public class GOLWindowControl implements
         Point imageCoordinate = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
         if (imageCoordinate == null)
             return;
-        gol.setAlive(imageCoordinate.x, imageCoordinate.y, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+        switch (getMode()) {
+            case RUN -> {
+                return;
+            }
+            case SET -> setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+            case DRAW -> {
+                return;
+            }
+        }
+        setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+        window.repaint();
+    }
+
+    private void setGOLPixel(Point imageCoordinate, boolean alive) {
+        gol.setAlive(imageCoordinate.x, imageCoordinate.y, alive);
         window.getImage().setRGB(
                 imageCoordinate.x,
                 imageCoordinate.y,
-                (gol.getAlive(imageCoordinate.x, imageCoordinate.y) ? aliveColor : deadColor).getRGB());
-        window.repaint();
+                (alive ? aliveColor : deadColor).getRGB());
     }
 
     @Override
