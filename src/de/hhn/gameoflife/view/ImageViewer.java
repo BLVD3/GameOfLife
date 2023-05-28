@@ -45,9 +45,13 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.add(new JButton("-"));
+        JButton zoomOutButton = new JButton("-");
+        JButton zoomInButton = new JButton("+");
+        zoomOutButton.addActionListener(e -> getZoomHandler().scaleZoom(2./3.));
+        zoomInButton.addActionListener(e -> getZoomHandler().scaleZoom(1.5));
+        bottomPanel.add(zoomOutButton);
         bottomPanel.add(zoomLabel);
-        bottomPanel.add(new JButton("+"));
+        bottomPanel.add(zoomInButton);
 
         add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.PAGE_END);
