@@ -104,6 +104,10 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         panel.addMouseListener(listener);
     }
 
+    public void addImageMouseMotionListener(MouseMotionListener listener) {
+        panel.addMouseMotionListener(listener);
+    }
+
     @Override
     public void keyTyped(KeyEvent keyEvent) {
 
