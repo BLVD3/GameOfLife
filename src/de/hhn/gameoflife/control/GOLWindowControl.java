@@ -55,6 +55,8 @@ public class GOLWindowControl implements
     }
 
     public void randomizeAllCells() {
+        if (getMode() == GOLMode.RUN)
+            return;
         for (int i = 0; i < gol.getHeight(); i++) {
             for (int j = 0; j < gol.getWidth(); j++) {
                 gol.setAlive(j, i, Math.random() > 0.5);
@@ -64,6 +66,8 @@ public class GOLWindowControl implements
     }
 
     public void clear() {
+        if (getMode() == GOLMode.RUN)
+            return;
         for (int i = 0; i < gol.getHeight(); i++) {
             for (int j = 0; j < gol.getWidth(); j++) {
                 gol.setAlive(j, i, false);
