@@ -14,6 +14,7 @@ public class MainWindow extends JFrame {
     JButton shapeWindowButton;
     JComboBox<GOLMode> modeSelector;
     GOLWindowDialog newWindowDialog;
+    GOLShapeSelectorWindow shapeSelector;
 
     public MainWindow() {
         //Window Setup
@@ -29,6 +30,7 @@ public class MainWindow extends JFrame {
         newWindowButton = new JButton("Neues GOLFenster"); //TODO String Resource
         newWindowButton.addActionListener(e -> newWindowButtonPressed());
         newWindowDialog = new GOLWindowDialog(this);
+        shapeSelector = new GOLShapeSelectorWindow();
         shapeWindowButton = new JButton("Figurenfenster anzeigen");
         shapeWindowButton.addActionListener(e -> shapeWindowButtonPressed());
         topPanel = new JPanel();
@@ -39,6 +41,7 @@ public class MainWindow extends JFrame {
         bottomPanel = new JDesktopPane();
         bottomPanel.setLayout(null);
         bottomPanel.add(newWindowDialog);
+        bottomPanel.add(shapeSelector);
 
 
         //Placement
@@ -56,10 +59,11 @@ public class MainWindow extends JFrame {
     }
 
     private void shapeWindowButtonPressed() {
-
+        shapeSelector.setVisible(!shapeSelector.isVisible());
+        shapeWindowButton.setText(shapeSelector.isVisible() ? "Figurenfenster verstecken" : "Figurenfenster anzeigen");
     }
 
-    public void addWindow(int width, int height) {
+    public void addGOLWindow(int width, int height) {
         bottomPanel.add(new GOLWindow(width, height, bottomPanel));
     }
 }

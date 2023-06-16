@@ -53,7 +53,7 @@ public class GOLWindowDialog extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Die Breite und Höhe müssen größer als 0 sein !");
             return;
         }
-        window.addWindow(width, height);
+        window.addGOLWindow(width, height);
         this.setVisible(false);
     }
 }

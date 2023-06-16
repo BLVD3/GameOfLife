@@ -2,11 +2,15 @@ package de.hhn.gameoflife.model;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class GOLShape {
+public class GOLShape implements Serializable {
     private final String name;
     private final GOLCellArray shape;
-    private BufferedImage image;
+    private transient BufferedImage image;
 
     public String getName() {
         return name;
@@ -31,5 +35,19 @@ public class GOLShape {
             }
         }
         return image;
+    }
+
+    public boolean save(String path) {
+        if (new File(path).exists())
+            return false;
+        try {
+            FileOutputStream fStream = new FileOutputStream(path);
+            ObjectOutputStream oStream = new ObjectOutputStream(fStream);
+            oStream.writeObject(this);
+        }
+        catch (Exception ignored) {
+            return false;
+        }
+        return true;
     }
 }

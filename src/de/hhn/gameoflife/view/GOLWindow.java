@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Semaphore;
 
 public class GOLWindow extends ImageViewer {
     private GOLWindowControl control;
