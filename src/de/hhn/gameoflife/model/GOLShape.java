@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class GOLShape implements Serializable {
+    private static long serialVersionUID = 1493152L;
     private final String name;
     private final GOLCellArray shape;
     private transient BufferedImage image;
