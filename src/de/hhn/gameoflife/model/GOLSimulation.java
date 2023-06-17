@@ -8,14 +8,14 @@ import de.hhn.gameoflife.util.GOLCellChangedListener;
  * @version 1.0
  */
 public class GOLSimulation extends GOLCellArray {
-    protected byte[] nextStep;
-    protected final byte[] changedBits;
+    protected transient byte[] nextStep;
+    protected transient final byte[] changedBits;
     // For rule sets 1 means change 0 mean no change
     // Bit 0 no neighbours bit 8 8 neighbours
     // Ruleset for dead cells
-    protected final short birthRule;
+    protected final transient short birthRule;
     // Ruleset for alive cells
-    protected final short deathRule;
+    protected final transient short deathRule;
 
     /**
      * @param width Width of this GOL field

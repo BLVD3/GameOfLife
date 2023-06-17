@@ -1,10 +1,7 @@
 package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GOLSimulation;
-import de.hhn.gameoflife.util.FPSChangedListener;
-import de.hhn.gameoflife.util.GOLCellChangedListener;
-import de.hhn.gameoflife.util.GOLMode;
-import de.hhn.gameoflife.util.PixelStreams;
+import de.hhn.gameoflife.util.*;
 import de.hhn.gameoflife.view.GOLWindow;
 
 import javax.swing.*;
@@ -13,6 +10,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.file.FileAlreadyExistsException;
 
 import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
 
@@ -74,6 +72,21 @@ public class GOLWindowControl implements
             }
         }
         updateAllCells();
+    }
+
+    public void save() {
+        String name = JOptionPane.showInputDialog("Name der Figur:");
+        if (name == null)
+            return;
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(null, "Eine Figur mit leerem Namen kann nicht gespeichert werden.");
+            return;
+        }
+        try {
+            ShapeIO.saveShape(gol, name);
+        } catch (FileAlreadyExistsException e) {
+            JOptionPane.showMessageDialog(null, "Figur existiert bereits");
+        }
     }
 
     public void updateAllCells() {

@@ -30,6 +30,8 @@ public class GOLWindow extends ImageViewer {
         randomizeButton.addActionListener(e -> control.randomizeAllCells());
         JButton clearButton = new JButton("Leeren");
         clearButton.addActionListener(e -> control.clear());
+        JButton saveAsShapeButton = new JButton("Als Figur Speichern");
+        saveAsShapeButton.addActionListener(e -> control.save());
         topPanel.add(stepButton);
         topPanel.add(new JLabel("Ziel FPS:"));
         topPanel.add(speedSlider);
@@ -37,6 +39,7 @@ public class GOLWindow extends ImageViewer {
         topPanel.add(randomizeButton);
         topPanel.add(clearButton);
         topPanel.add(fpsLabel);
+        topPanel.add(saveAsShapeButton);
         add(topPanel, BorderLayout.PAGE_START);
         setTitle(GOLWindowControl.getNextName());
         control = new GOLWindowControl(this, width, height);

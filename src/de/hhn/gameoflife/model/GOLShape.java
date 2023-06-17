@@ -22,7 +22,7 @@ public class GOLShape implements Serializable {
 
     public GOLShape(String name, GOLCellArray shape) {
         this.name = name;
-        this.shape = shape;
+        this.shape = shape.getCellArray();
     }
 
     public BufferedImage getImage() {
