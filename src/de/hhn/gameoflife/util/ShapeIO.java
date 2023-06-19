@@ -65,8 +65,4 @@ public class ShapeIO {
             }
         }
     }
-
-    public static void main(String[] args) {
-
-    }
 }
