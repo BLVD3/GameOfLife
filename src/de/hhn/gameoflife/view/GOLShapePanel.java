@@ -47,7 +47,7 @@ public class GOLShapePanel extends JPanel {
         leftPanel.add(image);
         leftPanel.add(new JLabel(shape.getName()));
         if (!justPreview) {
-            selectButton = new JButton("+") {
+            selectButton = new JButton(UIManager.getIcon("Tree.closedIcon")) {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     if (!selected) {
@@ -55,7 +55,7 @@ public class GOLShapePanel extends JPanel {
                     }
                 }
             };
-            deleteButton = new JButton("-");
+            deleteButton = new JButton("X");
             deleteButton.setBackground(new Color(0xDA0000));
             rightPanel.add(selectButton, BorderLayout.PAGE_START);
             rightPanel.add(deleteButton, BorderLayout.PAGE_END);
@@ -76,11 +76,12 @@ public class GOLShapePanel extends JPanel {
     public void setSelected(boolean state) {
         selected = state;
         if (selected) {
-
+            selectButton.setIcon(UIManager.getIcon("Tree.openIcon"));
             setBackground(UIManager.getColor("ScrollBar.thumb"));
             setBorder(SELECTED_BORDER);
         }
         else {
+            selectButton.setIcon(UIManager.getIcon("Tree.closedIcon"));
             setBackground(UIManager.getColor("Panel.background"));
             setBorder(UNSELECTED_BORDER);
         }

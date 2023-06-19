@@ -43,7 +43,6 @@ public class GOLMainWindow extends JFrame {
         bottomPanel.setLayout(null);
         bottomPanel.add(newWindowDialog);
 
-
         //Placement
         setLayout(new BorderLayout());
         add(topPanel, BorderLayout.PAGE_START);

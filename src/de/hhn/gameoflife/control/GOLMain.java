@@ -31,7 +31,8 @@ public class GOLMain {
     }
 
     public static void createInstance() {
-        instance = new GOLMain();
+        if (instance != null)
+            instance = new GOLMain();
     }
 
     public void addGOLWindow(int width, int height) {
