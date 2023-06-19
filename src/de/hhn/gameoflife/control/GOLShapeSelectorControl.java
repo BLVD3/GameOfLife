@@ -17,6 +17,7 @@ public class GOLShapeSelectorControl {
         this.window = window;
         shapes = new HashSet<>();
         shapes.addAll(List.of((ShapeIO.loadShapes())));
+        shapes.forEach(window::addShape);
     }
 
     public GOLShape[] getShapes() {

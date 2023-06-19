@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 public class GOLShapePanel extends JPanel {
     private static Border UNSELECTED_BORDER = BorderFactory.createLineBorder(new Color(0x000000));
@@ -41,7 +42,7 @@ public class GOLShapePanel extends JPanel {
             return;
         }
         this.shape = shape;
-        JLabel image = new JLabel(new ImageIcon(shape.getImage().getScaledInstance(38, 38, 0)));
+        JLabel image = new JLabel(new ImageIcon(scaleImage(shape.getImage())));
         image.setPreferredSize(new Dimension(38, 38));
         leftPanel.add(image);
         leftPanel.add(new JLabel(shape.getName()));
@@ -63,6 +64,13 @@ public class GOLShapePanel extends JPanel {
             selectButton = null;
             deleteButton = null;
         }
+    }
+
+    private Image scaleImage(BufferedImage image) {
+        float ratio = (float) image.getWidth() / image.getHeight();
+        if (ratio >= 1)
+            return image.getScaledInstance(38, Math.round(38 / ratio), Image.SCALE_SMOOTH);
+        return image.getScaledInstance(Math.round(38 * ratio), 38, Image.SCALE_SMOOTH);
     }
 
     public void setSelected(boolean state) {
