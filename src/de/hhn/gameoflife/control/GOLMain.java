@@ -31,7 +31,7 @@ public class GOLMain {
     }
 
     public static void createInstance() {
-        if (instance != null)
+        if (instance == null)
             instance = new GOLMain();
     }
 
