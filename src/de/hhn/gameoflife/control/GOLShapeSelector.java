@@ -2,18 +2,21 @@ package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.util.ShapeIO;
+import de.hhn.gameoflife.util.listeners.GOLModeChangedListener;
 import de.hhn.gameoflife.view.GOLShapeSelectorWindow;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class GOLShapeSelectorControl {
+public class GOLShapeSelector {
+    private static final List<GOLModeChangedListener> MODE_CHANGED_LISTENERS = new ArrayList<>();
     private final GOLShapeSelectorWindow window;
     private final HashSet<GOLShape> shapes;
 
-    public GOLShapeSelectorControl(GOLShapeSelectorWindow window) {
-        this.window = window;
+    public GOLShapeSelector() {
+        this.window = new GOLShapeSelectorWindow(this);
         shapes = new HashSet<>();
         Arrays.stream(ShapeIO.loadShapes()).forEach(this::addShape);
     }
@@ -33,5 +36,14 @@ public class GOLShapeSelectorControl {
     public void addShape(GOLShape shape) {
         if (shapes.add(shape))
             window.addShape(shape);
+    }
+
+    public boolean toggleVisibility() {
+        window.setVisible(!window.isVisible());
+        return window.isVisible();
+    }
+
+    public GOLShapeSelectorWindow getWindow() {
+        return window;
     }
 }

@@ -1,21 +1,19 @@
 package de.hhn.gameoflife.view;
 
-import de.hhn.gameoflife.control.GOLShapeSelectorControl;
-import de.hhn.gameoflife.model.GOLCellArray;
+import de.hhn.gameoflife.control.GOLShapeSelector;
 import de.hhn.gameoflife.model.GOLShape;
-import de.hhn.gameoflife.util.ShapeIO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class GOLShapeSelectorWindow extends JInternalFrame {
     JScrollPane scrollPane;
     JPanel container;
     GridBagConstraints constraints;
-    GOLShapeSelectorControl control;
+    GOLShapeSelector control;
 
-    public GOLShapeSelectorWindow() {
+    public GOLShapeSelectorWindow(GOLShapeSelector control) {
+        this.control = control;
         container = new JPanel();
         container.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
@@ -29,7 +27,6 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         setFrameIcon(null);
         setTitle("Figurwahl");
         setVisible(false);
-        control = new GOLShapeSelectorControl(this);
     }
 
     public void addShape(GOLShape shape) {

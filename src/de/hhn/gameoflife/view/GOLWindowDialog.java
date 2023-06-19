@@ -1,15 +1,17 @@
 package de.hhn.gameoflife.view;
 
+import de.hhn.gameoflife.control.GOLMain;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GOLWindowDialog extends JInternalFrame {
 
-    MainWindow window;
+    GOLMainWindow window;
     JTextField widthInput;
     JTextField heightInput;
 
-    public GOLWindowDialog(MainWindow window) {
+    public GOLWindowDialog(GOLMainWindow window) {
         this.window = window;
 
         setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -53,7 +55,7 @@ public class GOLWindowDialog extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Die Breite und Höhe müssen größer als 0 sein !");
             return;
         }
-        window.addGOLWindow(width, height);
+        GOLMain.getInstance().addGOLWindow(width, height);
         this.setVisible(false);
     }
 }

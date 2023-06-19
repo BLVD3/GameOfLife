@@ -1,12 +1,14 @@
 package de.hhn.gameoflife.view;
 
-import de.hhn.gameoflife.GameOfLifeApplication;
+import de.hhn.gameoflife.control.GOLMain;
 import de.hhn.gameoflife.util.GOLMode;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainWindow extends JFrame {
+public class GOLMainWindow extends JFrame {
+    GOLMain control;
+
     //Components
     JPanel topPanel;
     JDesktopPane bottomPanel;
@@ -14,9 +16,9 @@ public class MainWindow extends JFrame {
     JButton shapeWindowButton;
     JComboBox<GOLMode> modeSelector;
     GOLWindowDialog newWindowDialog;
-    GOLShapeSelectorWindow shapeSelector;
 
-    public MainWindow() {
+    public GOLMainWindow(GOLMain control) {
+        this.control = control;
         //Window Setup
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(screenSize.width / 3 * 2, screenSize.height / 3 * 2);
@@ -25,14 +27,13 @@ public class MainWindow extends JFrame {
 
         //Component preparation
         modeSelector = new JComboBox<>(GOLMode.values());
-        modeSelector.setSelectedItem(GameOfLifeApplication.getMode());
-        modeSelector.addItemListener(e -> GameOfLifeApplication.setMode((GOLMode) e.getItem()));
+        modeSelector.setSelectedItem(GOLMain.getInstance().getMode());
+        modeSelector.addItemListener(e -> GOLMain.getInstance().setMode((GOLMode) e.getItem()));
         newWindowButton = new JButton("Neues GOLFenster"); //TODO String Resource
         newWindowButton.addActionListener(e -> newWindowButtonPressed());
         newWindowDialog = new GOLWindowDialog(this);
-        shapeSelector = new GOLShapeSelectorWindow();
-        shapeWindowButton = new JButton("Figurenfenster anzeigen");
-        shapeWindowButton.addActionListener(e -> shapeWindowButtonPressed());
+        shapeWindowButton = new JButton("Sichtbarkeit Figurenfenster umschalten");
+        shapeWindowButton.addActionListener(e -> control.shapeWindowButtonPressed());
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(modeSelector);
@@ -41,7 +42,6 @@ public class MainWindow extends JFrame {
         bottomPanel = new JDesktopPane();
         bottomPanel.setLayout(null);
         bottomPanel.add(newWindowDialog);
-        bottomPanel.add(shapeSelector);
 
 
         //Placement
@@ -58,12 +58,8 @@ public class MainWindow extends JFrame {
         newWindowDialog.setVisible(true);
     }
 
-    private void shapeWindowButtonPressed() {
-        shapeSelector.setVisible(!shapeSelector.isVisible());
-        shapeWindowButton.setText(shapeSelector.isVisible() ? "Figurenfenster verstecken" : "Figurenfenster anzeigen");
-    }
-
-    public void addGOLWindow(int width, int height) {
-        bottomPanel.add(new GOLWindow(width, height, bottomPanel));
+    public void addInternalFrame(JInternalFrame frame) {
+        if (frame != null)
+            bottomPanel.add(frame);
     }
 }

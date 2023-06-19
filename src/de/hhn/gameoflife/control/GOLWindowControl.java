@@ -14,8 +14,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.nio.file.FileAlreadyExistsException;
 
-import static de.hhn.gameoflife.GameOfLifeApplication.getMode;
-
 public class GOLWindowControl implements
         Runnable,
         GOLCellChangedListener,
@@ -33,14 +31,14 @@ public class GOLWindowControl implements
     private final GOLWindow window;
     private final FPSCounter fpsCounter;
 
-    public GOLWindowControl(GOLWindow window, int width, int height) {
+    public GOLWindowControl(int width, int height) {
         mousePosition = new Point();
         aliveColor = Color.BLACK;
         deadColor = Color.WHITE;
         gol = new GOLSimulation(width, height);
         fpsCounter = new FPSCounter();
         threadStop = false;
-        this.window = window;
+        this.window = new GOLWindow(width, height, this);
         calculateFps(10);
 
         updateAllCells();
@@ -54,8 +52,12 @@ public class GOLWindowControl implements
         thread.start();
     }
 
+    public GOLWindow getWindow() {
+        return window;
+    }
+
     public void randomizeAllCells() {
-        if (getMode() == GOLMode.RUN)
+        if (GOLMain.getInstance().getMode() == GOLMode.RUN)
             return;
         for (int i = 0; i < gol.getHeight(); i++) {
             for (int j = 0; j < gol.getWidth(); j++) {
@@ -66,7 +68,7 @@ public class GOLWindowControl implements
     }
 
     public void clear() {
-        if (getMode() == GOLMode.RUN)
+        if (GOLMain.getInstance().getMode() == GOLMode.RUN)
             return;
         for (int i = 0; i < gol.getHeight(); i++) {
             for (int j = 0; j < gol.getWidth(); j++) {
@@ -113,7 +115,7 @@ public class GOLWindowControl implements
     public void run() {
         long start;
         while (!threadStop) {
-            if (getMode() == GOLMode.RUN) {
+            if (GOLMain.getInstance().getMode() == GOLMode.RUN) {
                 start = System.nanoTime();
                 golStep();
                 fpsCounter.add();
@@ -147,7 +149,7 @@ public class GOLWindowControl implements
     }
 
     public void stepButtonPressed() {
-        if (getMode() != GOLMode.RUN) {
+        if (GOLMain.getInstance().getMode() != GOLMode.RUN) {
             golStep();
         }
     }
@@ -182,7 +184,7 @@ public class GOLWindowControl implements
         if (imageCoordinate == null)
             return;
         System.out.println("working");
-        switch (getMode()) {
+        switch (GOLMain.getInstance().getMode()) {
             case RUN -> {
                 return;
             }
@@ -225,7 +227,7 @@ public class GOLWindowControl implements
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        if (getMode() != GOLMode.DRAW)
+        if (GOLMain.getInstance().getMode() != GOLMode.DRAW)
             return;
         PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, mouseEvent.getX(), mouseEvent.getY(),
                 (x, y) -> setGOLPixel(window.getZoomHandler().transformToImageCoordinate(x, y), true));

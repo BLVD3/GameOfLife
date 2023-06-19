@@ -14,14 +14,9 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
     private final JScrollBar scrollBarV;
     private final JScrollBar scrollBarH;
 
-    public ImageViewer(BufferedImage image, Container container) {
-        float sizeFactor = 64;
-        while ((int)(image.getHeight() * sizeFactor) > container.getHeight() * 4 / 5)
-            sizeFactor *= .5f;
-        while ((int)(image.getWidth() * sizeFactor) > container.getWidth() * 4 / 5)
-            sizeFactor *= .5f;
+    public ImageViewer(BufferedImage image) {
         panel = new ImageRendererPanel(image);
-        panel.setPreferredSize(new Dimension(Math.max((int)(image.getWidth() * sizeFactor), 300), (int)(image.getHeight() * sizeFactor)));
+        panel.setPreferredSize(new Dimension(300, 300));
         setLayout(new BorderLayout());
         scrollBarH = new JScrollBar(Adjustable.HORIZONTAL);
         scrollBarV = new JScrollBar(Adjustable.VERTICAL);
