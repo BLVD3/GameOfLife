@@ -4,6 +4,7 @@ import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.util.ShapeIO;
 import de.hhn.gameoflife.view.GOLShapeSelectorWindow;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -14,8 +15,7 @@ public class GOLShapeSelectorControl {
     public GOLShapeSelectorControl(GOLShapeSelectorWindow window) {
         this.window = window;
         shapes = new HashSet<>();
-        shapes.addAll(List.of((ShapeIO.loadShapes())));
-        shapes.forEach(window::addShape);
+        Arrays.stream(ShapeIO.loadShapes()).forEach(this::addShape);
     }
 
     public GOLShape[] getShapes() {
@@ -23,7 +23,7 @@ public class GOLShapeSelectorControl {
     }
 
     public void deleteShape(GOLShape shape) {
-
+        ShapeIO.deleteShape(shape.getName());
     }
 
     public void selectShape(GOLShape shape) {
@@ -31,6 +31,7 @@ public class GOLShapeSelectorControl {
     }
 
     public void addShape(GOLShape shape) {
-
+        if (shapes.add(shape))
+            window.addShape(shape);
     }
 }
