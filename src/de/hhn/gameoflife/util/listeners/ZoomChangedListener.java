@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.util;
+package de.hhn.gameoflife.util.listeners;
 
 public interface ZoomChangedListener {
     void positionChanged(double newX, double newY);

@@ -16,6 +16,12 @@ public class ShapeIO {
 
     private ShapeIO() { }
 
+    public static void deleteShape(String shape) {
+        File file = new File(SHAPE_PATH + "/" + shape + SHAPE_FILE_EXTENSION);
+        if (file.exists())
+            file.delete();
+    }
+
     public static GOLShape[] loadShapes() {
         File folder = new File(SHAPE_PATH);
         File[] files = folder.listFiles();

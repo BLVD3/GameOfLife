@@ -1,8 +1,7 @@
 package de.hhn.gameoflife.control;
 
-import de.hhn.gameoflife.util.FPSChangedListener;
+import de.hhn.gameoflife.util.listeners.FPSChangedListener;
 
-import java.util.Formattable;
 import java.util.HashSet;
 
 public class FPSCounter {

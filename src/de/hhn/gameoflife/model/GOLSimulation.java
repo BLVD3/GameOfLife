@@ -1,6 +1,6 @@
 package de.hhn.gameoflife.model;
 
-import de.hhn.gameoflife.util.GOLCellChangedListener;
+import de.hhn.gameoflife.util.listeners.GOLCellChangedListener;
 
 /**
  * Highly optimized Torus shaped Game of Life model

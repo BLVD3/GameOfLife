@@ -2,6 +2,8 @@ package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GOLSimulation;
 import de.hhn.gameoflife.util.*;
+import de.hhn.gameoflife.util.listeners.FPSChangedListener;
+import de.hhn.gameoflife.util.listeners.GOLCellChangedListener;
 import de.hhn.gameoflife.view.GOLWindow;
 
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package de.hhn.gameoflife.view;
 
-import de.hhn.gameoflife.util.ZoomChangedListener;
+import de.hhn.gameoflife.util.listeners.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;

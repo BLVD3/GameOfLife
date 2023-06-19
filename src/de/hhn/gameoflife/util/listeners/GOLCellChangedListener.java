@@ -1,4 +1,4 @@
-package de.hhn.gameoflife.util;
+package de.hhn.gameoflife.util.listeners;
 
 /**
  * Interface for the custom stream in GameOfLife

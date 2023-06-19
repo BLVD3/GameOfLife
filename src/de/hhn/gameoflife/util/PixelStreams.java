@@ -1,5 +1,7 @@
 package de.hhn.gameoflife.util;
 
+import de.hhn.gameoflife.util.listeners.PixelListener;
+
 public class PixelStreams {
     /**
      * Bersenham Algorithm
