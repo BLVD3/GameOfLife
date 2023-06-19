@@ -30,7 +30,9 @@ public class ShapeIO {
                     ObjectInputStream oStream = new ObjectInputStream(fStream);
                     GOLShape shape = (GOLShape) oStream.readObject();
                     shapes.add(shape);
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
             }
         }
         return shapes.toArray(new GOLShape[0]);
@@ -45,7 +47,7 @@ public class ShapeIO {
             file.createNewFile();
             FileOutputStream stream = new FileOutputStream(file);
             ObjectOutputStream oStream = new ObjectOutputStream(stream);
-            oStream.writeObject(cellArray);
+            oStream.writeObject(new GOLShape(name, cellArray));
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -62,5 +64,9 @@ public class ShapeIO {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }
