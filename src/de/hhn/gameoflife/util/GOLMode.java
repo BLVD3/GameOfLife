@@ -3,7 +3,8 @@ package de.hhn.gameoflife.util;
 public enum GOLMode {
     RUN,
     DRAW,
-    SET;
+    SET,
+    SHAPES;
 
     @Override
     public String toString() {
@@ -11,6 +12,7 @@ public enum GOLMode {
             case RUN -> "Laufen";
             case DRAW -> "Malen";
             case SET -> "Setzen";
+            case SHAPES -> "Figuren";
         };
     }
 }

@@ -9,6 +9,12 @@ import java.io.Serializable;
 
 public class GOLShape implements Serializable {
     private static long serialVersionUID = 1493152L;
+    private static final GOLShape DOT;
+    static {
+        GOLCellArray cellArray = new GOLCellArray(3, 3);
+        cellArray.setAlive(1, 1, true);
+        DOT = new GOLShape("Dot", cellArray);
+    }
     private final String name;
     private final GOLCellArray shape;
     private transient BufferedImage image;

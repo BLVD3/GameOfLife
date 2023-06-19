@@ -8,11 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GOLMain {
+
+
     private final List<GOLModeChangedListener> modeChangedListeners = new ArrayList<>();
     private static GOLMain instance;
     private volatile GOLMode mode;
     private final GOLMainWindow window;
     private final GOLShapeSelector shapeSelector;
+
+
 
     private GOLMain() {
         instance = this;
