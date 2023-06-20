@@ -14,11 +14,13 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
     GOLShapeSelector control;
 
     HashMap<GOLShape, GOLShapePanel> shapes;
+    GOLShape currentlySelected;
 
     public GOLShapeSelectorWindow(GOLShapeSelector control) {
         this.control = control;
         container = new JPanel();
         shapes = new HashMap<>();
+        currentlySelected = null;
         container.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -45,6 +47,15 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         if (shapes.containsKey(shape)) {
             container.remove(shapes.get(shape));
             shapes.remove(shape);
+        }
+    }
+
+    public void setSelectedShape(GOLShape shape) {
+        if (shapes.containsKey(shape)) {
+            if (currentlySelected != null)
+                shapes.get(currentlySelected).setSelected(false);
+            shapes.get(shape).setSelected(true);
+            currentlySelected = shape;
         }
     }
 }

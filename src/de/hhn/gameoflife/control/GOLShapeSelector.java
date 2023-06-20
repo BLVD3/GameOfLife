@@ -46,4 +46,22 @@ public class GOLShapeSelector {
     public GOLShapeSelectorWindow getWindow() {
         return window;
     }
+
+    public void shapeSelected(GOLShape shape) {
+        if (shapes.contains(shape)) {
+            window.setSelectedShape(shape);
+            GOLMain.getInstance().setSelectedShape(shape);
+        }
+    }
+
+    public void shapeDeleteButtonPressed(GOLShape shape) {
+        if (shapes.contains(shape)) {
+            shapes.remove(shape);
+            window.removeShape(shape);
+            if (GOLMain.getInstance().getSelectedShape() == shape) {
+                GOLMain.getInstance().setSelectedShape(GOLShape.DOT);
+            }
+            ShapeIO.deleteShape(shape.getName());
+        }
+    }
 }

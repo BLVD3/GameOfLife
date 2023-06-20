@@ -38,7 +38,7 @@ public class GOLMainWindow extends JFrame {
         shapeWindowButton.addActionListener(e -> control.shapeWindowButtonPressed());
         shapePreviewPanel = new JPanel();
         shapePreviewPanel.setLayout(new BorderLayout());
-        shapePreviewPanel.setPreferredSize(new Dimension(150, 50));
+        shapePreviewPanel.setPreferredSize(new Dimension(200, 50));
         setShapePreview(GOLShape.DOT);
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -72,5 +72,7 @@ public class GOLMainWindow extends JFrame {
     public void setShapePreview(GOLShape shape) {
         shapePreviewPanel.removeAll();
         shapePreviewPanel.add(new GOLShapePanel(shape, true));
+        shapePreviewPanel.revalidate();
+        shapePreviewPanel.repaint();
     }
 }

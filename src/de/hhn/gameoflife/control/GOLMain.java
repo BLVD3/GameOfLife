@@ -43,6 +43,10 @@ public class GOLMain {
         return selectedShape;
     }
 
+    public GOLShapeSelector getShapeSelector() {
+        return shapeSelector;
+    }
+
     public void setSelectedShape(GOLShape shape) {
         selectedShape = shape;
         window.setShapePreview(shape);

@@ -1,5 +1,6 @@
 package de.hhn.gameoflife.view;
 
+import de.hhn.gameoflife.control.GOLMain;
 import de.hhn.gameoflife.model.GOLCellArray;
 import de.hhn.gameoflife.model.GOLShape;
 
@@ -59,6 +60,8 @@ public class GOLShapePanel extends JPanel {
             deleteButton.setBackground(new Color(0xDA0000));
             rightPanel.add(selectButton, BorderLayout.PAGE_START);
             rightPanel.add(deleteButton, BorderLayout.PAGE_END);
+            selectButton.addActionListener(e -> selectButtonPressed());
+            deleteButton.addActionListener(e -> deleteButtonPressed());
         }
         else {
             selectButton = null;
@@ -91,5 +94,11 @@ public class GOLShapePanel extends JPanel {
         return shape;
     }
 
+    private void selectButtonPressed() {
+        GOLMain.getInstance().getShapeSelector().shapeSelected(shape);
+    }
 
+    private void deleteButtonPressed() {
+        GOLMain.getInstance().getShapeSelector().shapeDeleteButtonPressed(shape);
+    }
 }
