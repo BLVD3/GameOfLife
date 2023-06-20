@@ -194,7 +194,6 @@ public class GOLWindowControl implements
         Point imageCoordinate = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
         if (imageCoordinate == null)
             return;
-        System.out.println("working");
         switch (GOLMain.getInstance().getMode()) {
             case RUN -> {
                 return;
@@ -203,8 +202,10 @@ public class GOLWindowControl implements
                 setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
                 window.repaint();
             }
-            case DRAW -> {
-                mousePosition.setLocation(mouseEvent.getPoint());
+            case DRAW -> mousePosition.setLocation(mouseEvent.getPoint());
+            case SHAPES -> {
+                gol.applyShape(GOLMain.getInstance().getSelectedShape().getShape(), imageCoordinate.x, imageCoordinate.y);
+                updateAllCells();
             }
         }
     }

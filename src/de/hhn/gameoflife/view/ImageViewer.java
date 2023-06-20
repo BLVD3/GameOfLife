@@ -69,10 +69,6 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         setVisible(true);
     }
 
-    public void pressedSomething() {
-        System.out.println("Hallo");
-    }
-
     public BufferedImage getImage() {
         return panel.getImage();
     }
@@ -110,7 +106,6 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        System.out.println(keyEvent.getKeyCode());
         switch (keyEvent.getKeyCode()) {
             case 37 -> getZoomHandler().setShiftDeltaRelative(-0.1, 0);
             case 38 -> getZoomHandler().setShiftDeltaRelative(0, -0.1);

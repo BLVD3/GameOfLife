@@ -74,7 +74,7 @@ public class GOLCellArray implements Serializable {
             throw new IllegalArgumentException("Shape should not be bigger then the GOLCellArray its applied to");
         for (int i = 0; i < shape.getHeight(); i++) {
             for (int j = 0; j < shape.getWidth(); j++) {
-                setAlive(x + j % width, y + i % height, shape.getAlive(j, i));
+                setAlive((x + j) % width, (y + i) % height, shape.getAlive(j, i));
             }
         }
     }
