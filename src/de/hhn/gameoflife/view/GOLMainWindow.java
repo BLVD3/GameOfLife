@@ -1,6 +1,7 @@
 package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.control.GOLMain;
+import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.util.GOLMode;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class GOLMainWindow extends JFrame {
     JButton shapeWindowButton;
     JComboBox<GOLMode> modeSelector;
     GOLWindowDialog newWindowDialog;
+    JPanel shapePreviewPanel;
 
     public GOLMainWindow(GOLMain control) {
         this.control = control;
@@ -34,11 +36,16 @@ public class GOLMainWindow extends JFrame {
         newWindowDialog = new GOLWindowDialog(this);
         shapeWindowButton = new JButton("Sichtbarkeit Figurenfenster umschalten");
         shapeWindowButton.addActionListener(e -> control.shapeWindowButtonPressed());
+        shapePreviewPanel = new JPanel();
+        shapePreviewPanel.setLayout(new BorderLayout());
+        shapePreviewPanel.setPreferredSize(new Dimension(150, 50));
+        setShapePreview(GOLShape.DOT);
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(modeSelector);
         topPanel.add(newWindowButton);
         topPanel.add(shapeWindowButton);
+        topPanel.add(shapePreviewPanel);
         bottomPanel = new JDesktopPane();
         bottomPanel.setLayout(null);
         bottomPanel.add(newWindowDialog);
@@ -60,5 +67,10 @@ public class GOLMainWindow extends JFrame {
     public void addInternalFrame(JInternalFrame frame) {
         if (frame != null)
             bottomPanel.add(frame);
+    }
+
+    public void setShapePreview(GOLShape shape) {
+        shapePreviewPanel.removeAll();
+        shapePreviewPanel.add(new GOLShapePanel(shape, true));
     }
 }

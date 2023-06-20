@@ -90,4 +90,6 @@ public class GOLShapePanel extends JPanel {
     public GOLShape getShape() {
         return shape;
     }
+
+
 }

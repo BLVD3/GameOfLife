@@ -3,7 +3,7 @@ package de.hhn.gameoflife.model;
 import java.io.Serializable;
 
 public class GOLCellArray implements Serializable {
-    private static long serialVersionUID = 1493151L;
+    private static final long serialVersionUID = -5956813691359558604L;
     // Contains the state of each cell. One bit per cell
     // Layout: 7 6 5 4 3 2 1 0 | 15 14 13 12 11 10 9 8 | 23 ...
     protected byte[] fieldData;

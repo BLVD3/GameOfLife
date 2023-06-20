@@ -5,6 +5,7 @@ import de.hhn.gameoflife.model.GOLShape;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GOLShapeSelectorWindow extends JInternalFrame {
     JScrollPane scrollPane;
@@ -12,9 +13,12 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
     GridBagConstraints constraints;
     GOLShapeSelector control;
 
+    HashMap<GOLShape, GOLShapePanel> shapes;
+
     public GOLShapeSelectorWindow(GOLShapeSelector control) {
         this.control = control;
         container = new JPanel();
+        shapes = new HashMap<>();
         container.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -30,6 +34,17 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
     }
 
     public void addShape(GOLShape shape) {
-        container.add(new GOLShapePanel(shape, false), constraints);
+        if (!shapes.containsKey(shape)) {
+            GOLShapePanel panel = new GOLShapePanel(shape, false);
+            shapes.put(shape, panel);
+            container.add(panel, constraints);
+        }
+    }
+
+    public void removeShape(GOLShape shape) {
+        if (shapes.containsKey(shape)) {
+            container.remove(shapes.get(shape));
+            shapes.remove(shape);
+        }
     }
 }
