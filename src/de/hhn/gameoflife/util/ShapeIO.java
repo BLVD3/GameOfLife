@@ -44,7 +44,7 @@ public class ShapeIO {
         return shapes.toArray(new GOLShape[0]);
     }
 
-    public static void saveShape(GOLCellArray cellArray, String name) throws FileAlreadyExistsException {
+    public static GOLShape saveShape(GOLCellArray cellArray, String name) throws FileAlreadyExistsException {
         File file = new File(SHAPE_PATH + "/" + name + SHAPE_FILE_EXTENSION);
         if (file.exists()) {
             throw new FileAlreadyExistsException("A Shape named " + name + " already exists");
@@ -53,10 +53,13 @@ public class ShapeIO {
             file.createNewFile();
             FileOutputStream stream = new FileOutputStream(file);
             ObjectOutputStream oStream = new ObjectOutputStream(stream);
-            oStream.writeObject(new GOLShape(name, cellArray));
+            GOLShape shape = new GOLShape(name, cellArray);
+            oStream.writeObject(shape);
+            return shape;
         }
         catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

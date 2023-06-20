@@ -1,5 +1,6 @@
 package de.hhn.gameoflife.control;
 
+import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.model.GOLSimulation;
 import de.hhn.gameoflife.util.*;
 import de.hhn.gameoflife.util.listeners.FPSChangedListener;
@@ -87,7 +88,8 @@ public class GOLWindowControl implements
             return;
         }
         try {
-            ShapeIO.saveShape(gol, name);
+            GOLShape shape = ShapeIO.saveShape(gol, name);
+            GOLMain.getInstance().getShapeSelector().addShape(shape);
         } catch (FileAlreadyExistsException e) {
             JOptionPane.showMessageDialog(null, "Figur existiert bereits");
         }
@@ -177,7 +179,16 @@ public class GOLWindowControl implements
         window.changeFpsDisplay(fps);
     }
 
-    //#region unused events
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {
+        if (GOLMain.getInstance().getMode() != GOLMode.DRAW)
+            return;
+        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, mouseEvent.getX(), mouseEvent.getY(),
+                (x, y) -> setGOLPixel(window.getZoomHandler().transformToImageCoordinate(x, y), true));
+        mousePosition.setLocation(mouseEvent.getPoint());
+        window.repaint();
+    }
+
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         Point imageCoordinate = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
@@ -197,6 +208,8 @@ public class GOLWindowControl implements
             }
         }
     }
+
+    //#region unused events
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) { }
@@ -224,16 +237,6 @@ public class GOLWindowControl implements
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent internalFrameEvent) { }
-
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-        if (GOLMain.getInstance().getMode() != GOLMode.DRAW)
-            return;
-        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, mouseEvent.getX(), mouseEvent.getY(),
-                (x, y) -> setGOLPixel(window.getZoomHandler().transformToImageCoordinate(x, y), true));
-        mousePosition.setLocation(mouseEvent.getPoint());
-        window.repaint();
-    }
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
