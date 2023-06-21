@@ -11,6 +11,8 @@ public class PixelStreams {
      * @param y1 end y
      */
     public static void forEachPixelInLine(int x0, int y0, int x1, int y1, PixelListener listener) {
+        if (x0 == x1 && y0 == y1)
+            return;
         if (Math.abs(y1 - y0) < Math.abs(x1 - x0)) {
             if (x0 > x1)
                 lineLow(x1, y1, x0, y0, listener);
@@ -63,8 +65,7 @@ public class PixelStreams {
             if (d > 0) {
                 x = x + xi;
                 d = d + (2 * (dx - dy));
-            }
-            else
+            } else
                 d = d + 2 * dx;
         }
     }

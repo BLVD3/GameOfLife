@@ -23,7 +23,8 @@ public class GOLWindowControl implements
         InternalFrameListener,
         FPSChangedListener {
     private static int NEXT_ID = 0;
-    private Point mousePosition;
+    private final Point mousePosition;
+    private boolean isDrawing;
     private volatile long waitTime;
     private volatile boolean threadStop;
     private volatile Color aliveColor;
@@ -138,11 +139,12 @@ public class GOLWindowControl implements
     }
 
     private void setGOLPixel(Point imageCoordinate, boolean alive) {
-        gol.setAlive(imageCoordinate.x, imageCoordinate.y, alive);
-        window.getImage().setRGB(
-                imageCoordinate.x,
-                imageCoordinate.y,
-                (alive ? aliveColor : deadColor).getRGB());
+        setGOLPixel(imageCoordinate.x, imageCoordinate.y, alive);
+    }
+
+    private void setGOLPixel(int x, int y, boolean alive) {
+        gol.setAlive(x, y, alive);
+        window.getImage().setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
     }
 
     @Override
@@ -181,12 +183,7 @@ public class GOLWindowControl implements
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        if (GOLMain.getInstance().getMode() != GOLMode.DRAW)
-            return;
-        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, mouseEvent.getX(), mouseEvent.getY(),
-                (x, y) -> setGOLPixel(window.getZoomHandler().transformToImageCoordinate(x, y), true));
-        mousePosition.setLocation(mouseEvent.getPoint());
-        window.repaint();
+        mouseMoved(mouseEvent);
     }
 
     @Override
@@ -202,7 +199,10 @@ public class GOLWindowControl implements
                 setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
                 window.repaint();
             }
-            case DRAW -> mousePosition.setLocation(mouseEvent.getPoint());
+            case DRAW -> {
+                mousePosition.setLocation(imageCoordinate);
+                isDrawing = true;
+            }
             case SHAPES -> {
                 gol.applyShape(GOLMain.getInstance().getSelectedShape().getShape(), imageCoordinate.x, imageCoordinate.y);
                 updateAllCells();
@@ -213,7 +213,9 @@ public class GOLWindowControl implements
     //#region unused events
 
     @Override
-    public void mouseReleased(MouseEvent mouseEvent) { }
+    public void mouseReleased(MouseEvent mouseEvent) {
+        isDrawing = false;
+    }
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) { }
@@ -241,7 +243,17 @@ public class GOLWindowControl implements
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-
+        if (!isDrawing || GOLMain.getInstance().getMode() != GOLMode.DRAW)
+            return;
+        Point newMousePosition = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
+        if (newMousePosition == null) {
+            isDrawing = false;
+            return;
+        }
+        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, newMousePosition.x, newMousePosition.y,
+                (x, y) -> setGOLPixel(x, y, true));
+        mousePosition.setLocation(newMousePosition);
+        window.repaint();
     }
     //#endregion
 }
