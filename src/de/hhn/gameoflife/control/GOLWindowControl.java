@@ -196,12 +196,16 @@ public class GOLWindowControl implements
                 return;
             }
             case SET -> {
-                setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+                setGOLPixel(imageCoordinate, true);
                 window.repaint();
             }
             case DRAW -> {
                 mousePosition.setLocation(imageCoordinate);
                 isDrawing = true;
+            }
+            case TOGGLE -> {
+                setGOLPixel(imageCoordinate, !gol.getAlive(imageCoordinate.x, imageCoordinate.y));
+                window.repaint();
             }
             case SHAPES -> {
                 gol.applyShape(GOLMain.getInstance().getSelectedShape().getShape(), imageCoordinate.x, imageCoordinate.y);
