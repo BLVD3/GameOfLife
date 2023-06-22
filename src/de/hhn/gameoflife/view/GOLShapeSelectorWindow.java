@@ -32,6 +32,7 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         pack();
         setFrameIcon(null);
         setTitle("Figurwahl");
+        setBorder(null);
         setVisible(false);
     }
 

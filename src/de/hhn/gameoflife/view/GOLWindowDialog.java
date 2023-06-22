@@ -21,6 +21,7 @@ public class GOLWindowDialog extends JInternalFrame {
         getContentPane().setPreferredSize(new Dimension(180, 111));
         pack();
         setResizable(false);
+        setBorder(null);
         setClosable(true);
         JLabel widthLabel = new JLabel("Breite:");
         JLabel heightLabel = new JLabel("Höhe:");

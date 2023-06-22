@@ -4,6 +4,9 @@ import de.hhn.gameoflife.util.listeners.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -66,6 +69,7 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         setOpaque(true);
         setFocusable(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setBorder(null);
         setVisible(true);
     }
 

@@ -27,8 +27,8 @@ public class GOLWindowControl implements
     private boolean isDrawing;
     private volatile long waitTime;
     private volatile boolean threadStop;
-    private volatile Color aliveColor;
-    private volatile Color deadColor;
+    private Color aliveColor;
+    private Color deadColor;
     private final GOLSimulation gol;
     private final GOLWindow window;
     private final FPSCounter fpsCounter;
@@ -258,6 +258,22 @@ public class GOLWindowControl implements
                 (x, y) -> setGOLPixel(x, y, true));
         mousePosition.setLocation(newMousePosition);
         window.repaint();
+    }
+
+    public void changeLifeColor() {
+        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Lebenden Zellen", aliveColor);
+        if (newColor != null && aliveColor != newColor) {
+            aliveColor = newColor;
+            updateAllCells();
+        }
+    }
+
+    public void changeDeadColor() {
+        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Leeren Zellen", deadColor);
+        if (newColor != null && deadColor != newColor) {
+            deadColor = newColor;
+            updateAllCells();
+        }
     }
     //#endregion
 }

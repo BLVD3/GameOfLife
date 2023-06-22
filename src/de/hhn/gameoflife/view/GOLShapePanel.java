@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class GOLShapePanel extends JPanel {
     private static Border UNSELECTED_BORDER = BorderFactory.createLineBorder(new Color(0x000000));
@@ -81,11 +82,13 @@ public class GOLShapePanel extends JPanel {
         if (selected) {
             selectButton.setIcon(UIManager.getIcon("Tree.openIcon"));
             setBackground(UIManager.getColor("ScrollBar.thumb"));
+            Arrays.stream(getComponents()).forEach(c -> c.setBackground(UIManager.getColor("ScrollBar.thumb")));
             setBorder(SELECTED_BORDER);
         }
         else {
             selectButton.setIcon(UIManager.getIcon("Tree.closedIcon"));
             setBackground(UIManager.getColor("Panel.background"));
+            Arrays.stream(getComponents()).forEach(c -> c.setBackground(UIManager.getColor("Panel.background")));
             setBorder(UNSELECTED_BORDER);
         }
     }
