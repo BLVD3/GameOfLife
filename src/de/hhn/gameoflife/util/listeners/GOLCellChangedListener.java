@@ -2,6 +2,8 @@ package de.hhn.gameoflife.util.listeners;
 
 /**
  * Interface for the custom stream in GameOfLife
+ * @author Nico Vogel
+ * @version 1.0
  */
 public interface GOLCellChangedListener {
     /**

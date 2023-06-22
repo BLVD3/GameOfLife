@@ -2,16 +2,12 @@ package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.util.ShapeIO;
-import de.hhn.gameoflife.util.listeners.GOLModeChangedListener;
 import de.hhn.gameoflife.view.GOLShapeSelectorWindow;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 public class GOLShapeSelector {
-    private static final List<GOLModeChangedListener> MODE_CHANGED_LISTENERS = new ArrayList<>();
     private final GOLShapeSelectorWindow window;
     private final HashSet<GOLShape> shapes;
 

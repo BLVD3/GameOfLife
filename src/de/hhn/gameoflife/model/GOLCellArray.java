@@ -1,10 +1,17 @@
 package de.hhn.gameoflife.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Highly optimized 2D-Bitset specifically for GameOfLife
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class GOLCellArray implements Serializable {
+    @Serial
     private static final long serialVersionUID = -5956813691359558604L;
-    // Contains the state of each cell. One bit per cell
+    // Contains the state of each cell. One bit per cell, Practically a BitSet
     // Layout: 7 6 5 4 3 2 1 0 | 15 14 13 12 11 10 9 8 | 23 ...
     protected byte[] fieldData;
     protected final int width;

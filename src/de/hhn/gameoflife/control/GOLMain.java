@@ -2,11 +2,7 @@ package de.hhn.gameoflife.control;
 
 import de.hhn.gameoflife.model.GOLShape;
 import de.hhn.gameoflife.util.GOLMode;
-import de.hhn.gameoflife.util.listeners.GOLModeChangedListener;
 import de.hhn.gameoflife.view.GOLMainWindow;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GOLMain {
     private static GOLMain instance;

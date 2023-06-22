@@ -63,6 +63,9 @@ public class ZoomHandler {
         return yShift;
     }
 
+    /**
+     * @return the Position of the area the image should be rendered on
+     */
     public Rectangle2D.Double getImagePosition() {
         return imagePosition;
     }
@@ -118,10 +121,17 @@ public class ZoomHandler {
         calculateAll();
     }
 
+    /**
+     * changes the zoom relative to its current zoom level
+     * @param delta the change
+     */
     public void setZoomDelta(double delta) {
         setZoom(zoomLevel + delta);
     }
 
+    /**
+     * Changes the zoom level by a factor
+     */
     public void scaleZoom(double factor) {
         setZoom(zoomLevel * factor);
     }
@@ -186,6 +196,12 @@ public class ZoomHandler {
         listeners.forEach(listener -> listener.scaleChanged(zoomLevel));
     }
 
+    /**
+     * Converts a screen space coordinate to a coordinate in image space
+     * @param x x coordinate in screen space
+     * @param y y coordinate in screen space
+     * @return null if the screen space coordinate is outside the image or the pixel of the image
+     */
     public Point transformToImageCoordinate(int x, int y) {
         if (!imagePosition.contains(new Point(x, y)))
             return null;

@@ -39,7 +39,7 @@ public class GOLSimulation extends GOLCellArray {
      * @param height Height of this GOL field
      */
     public GOLSimulation(int width, int height) {
-        this(width, height, (short)0b100000, (short)0b110011111);
+        this(width, height, (short)0b000100000, (short)0b110011111);
     }
 
     /**
@@ -97,6 +97,9 @@ public class GOLSimulation extends GOLCellArray {
         performPreMadeStep();
     }
 
+    /**
+     * Performs the Prepared changes from {@link #setAliveNextStep(int, int, boolean)}
+     */
     public void performPreMadeStep() {
         for (int i = 0; i < fieldData.length; i++) {
             changedBits[i] = (byte)(nextStep[i] ^ fieldData[i]);

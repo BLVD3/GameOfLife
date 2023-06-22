@@ -15,6 +15,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.nio.file.FileAlreadyExistsException;
 
+/**
+ * Class controlling the GOLWindow
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class GOLWindowControl implements
         Runnable,
         GOLCellChangedListener,
@@ -22,16 +27,58 @@ public class GOLWindowControl implements
         MouseMotionListener,
         InternalFrameListener,
         FPSChangedListener {
-    private static int NEXT_ID = 0;
+    private static int NEXT_ID = 1;
+    private final GOLSimulation gol;
+    private final GOLWindow window;
+    private final FPSCounter fpsCounter;
+    private Color aliveColor;
+    private Color deadColor;
     private final Point mousePosition;
     private boolean isDrawing;
     private volatile long waitTime;
     private volatile boolean threadStop;
-    private Color aliveColor;
-    private Color deadColor;
-    private final GOLSimulation gol;
-    private final GOLWindow window;
-    private final FPSCounter fpsCounter;
+
+    /**
+     * @return the Title for the next Window
+     */
+    public static String getNextName() {
+        return "Fenster: " + NEXT_ID++;
+    }
+
+    /**
+     * @return the Window if this Control
+     */
+    public GOLWindow getWindow() {
+        return window;
+    }
+
+    /**
+     * Thread that keeps updating the Game of Live instance as long as the Mode is set to RUN
+     */
+    @Override
+    public void run() {
+        long start;
+        while (!threadStop) {
+            if (GOLMain.getInstance().getMode() == GOLMode.RUN) {
+                start = System.nanoTime();
+                golStep();
+                fpsCounter.add();
+                while (System.nanoTime() - start < waitTime)
+                    Thread.onSpinWait();
+            } else
+                Thread.onSpinWait();
+        }
+    }
+
+    /**
+     * Calculates the next Generation and applies every change from the last Generation to the Image
+     */
+    public void golStep() {
+        gol.step();
+        gol.forEachChange(this);
+        window.repaint();
+    }
+
 
     public GOLWindowControl(int width, int height) {
         mousePosition = new Point();
@@ -41,7 +88,7 @@ public class GOLWindowControl implements
         fpsCounter = new FPSCounter();
         threadStop = false;
         this.window = new GOLWindow(width, height, this);
-        calculateFps(10);
+        calculateTargetFps(10);
 
         updateAllCells();
 
@@ -54,10 +101,39 @@ public class GOLWindowControl implements
         thread.start();
     }
 
-    public GOLWindow getWindow() {
-        return window;
+    /**
+     * changes the state of one specific cell
+     * @param imageCoordinate Position of the cell
+     * @param alive State of the cell
+     */
+    private void setGOLPixel(Point imageCoordinate, boolean alive) {
+        setGOLPixel(imageCoordinate.x, imageCoordinate.y, alive);
     }
 
+    /**
+     * changes the state of one specific cell
+     * @param x x coordinate of the cell
+     * @param y y coordinate of the cell
+     * @param alive State of the cell
+     */
+    private void setGOLPixel(int x, int y, boolean alive) {
+        gol.setAlive(x, y, alive);
+        window.getImage().setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
+    }
+
+    /**
+     * Redraw all cells, regardless of what changed
+     */
+    public void updateAllCells() {
+        for (int i = 0; i < gol.getWidth(); i++)
+            for (int j = 0; j < gol.getHeight(); j++)
+                cellChangedEvent(i, j, gol.getAlive(i, j));
+        window.repaint();
+    }
+
+    /**
+     * Gives every cell a random state
+     */
     public void randomizeAllCells() {
         if (GOLMain.getInstance().getMode() == GOLMode.RUN)
             return;
@@ -69,6 +145,9 @@ public class GOLWindowControl implements
         updateAllCells();
     }
 
+    /**
+     * Removes all alive cells
+     */
     public void clear() {
         if (GOLMain.getInstance().getMode() == GOLMode.RUN)
             return;
@@ -80,6 +159,9 @@ public class GOLWindowControl implements
         updateAllCells();
     }
 
+    /**
+     * Saves the field as a shape after the user inputs a name
+     */
     public void save() {
         String name = JOptionPane.showInputDialog("Name der Figur:");
         if (name == null)
@@ -96,17 +178,35 @@ public class GOLWindowControl implements
         }
     }
 
-    public void updateAllCells() {
-        for (int i = 0; i < gol.getWidth(); i++)
-            for (int j = 0; j < gol.getHeight(); j++)
-                cellChangedEvent(i, j, gol.getAlive(i, j));
-        window.repaint();
+    /**
+     * Does a step when the Thread is not doing so already
+     */
+    public void tryStep() {
+        if (GOLMain.getInstance().getMode() != GOLMode.RUN) {
+            golStep();
+        }
     }
 
-    public synchronized void golStep() {
-        gol.step();
-        gol.forEachChange(this);
-        window.repaint();
+    /**
+     * Change the Color of alive cells after the user selects the new Color
+     */
+    public void changeLifeColor() {
+        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Lebenden Zellen", aliveColor);
+        if (newColor != null && aliveColor != newColor) {
+            aliveColor = newColor;
+            updateAllCells();
+        }
+    }
+
+    /**
+     * Change the Color of dead cells after the user selects the new Color
+     */
+    public void changeDeadColor() {
+        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Leeren Zellen", deadColor);
+        if (newColor != null && deadColor != newColor) {
+            deadColor = newColor;
+            updateAllCells();
+        }
     }
 
     @Override
@@ -115,47 +215,13 @@ public class GOLWindowControl implements
     }
 
     @Override
-    public void run() {
-        long start;
-        while (!threadStop) {
-            if (GOLMain.getInstance().getMode() == GOLMode.RUN) {
-                start = System.nanoTime();
-                golStep();
-                fpsCounter.add();
-                while (System.nanoTime() - start < waitTime)
-                    Thread.onSpinWait();
-            } else
-                Thread.onSpinWait();
-        }
-    }
-
-    public static String getNextName() {
-        return "Fenster: " + NEXT_ID++;
-    }
-
-    @Override
     public void mouseClicked(MouseEvent mouseEvent) {
 
-    }
-
-    private void setGOLPixel(Point imageCoordinate, boolean alive) {
-        setGOLPixel(imageCoordinate.x, imageCoordinate.y, alive);
-    }
-
-    private void setGOLPixel(int x, int y, boolean alive) {
-        gol.setAlive(x, y, alive);
-        window.getImage().setRGB(x, y, (alive ? aliveColor : deadColor).getRGB());
     }
 
     @Override
     public void internalFrameClosing(InternalFrameEvent internalFrameEvent) {
         threadStop = true;
-    }
-
-    public void stepButtonPressed() {
-        if (GOLMain.getInstance().getMode() != GOLMode.RUN) {
-            golStep();
-        }
     }
 
     public void fpsSliderChanged(ChangeEvent e) {
@@ -165,12 +231,12 @@ public class GOLWindowControl implements
                 window.setSpeedLabel("∞");
             }
             else {
-                calculateFps(slider.getValue());
+                calculateTargetFps(slider.getValue());
             }
         }
     }
 
-    private void calculateFps(int sliderValue) {
+    private void calculateTargetFps(int sliderValue) {
         int fpsTarget = (int)Math.round(Math.pow(Math.pow(144, 0.01), sliderValue));
         waitTime = 1000000000L / fpsTarget;
         window.setSpeedLabel(String.valueOf(fpsTarget));
@@ -214,11 +280,24 @@ public class GOLWindowControl implements
         }
     }
 
-    //#region unused events
-
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         isDrawing = false;
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+        if (!isDrawing || GOLMain.getInstance().getMode() != GOLMode.DRAW)
+            return;
+        Point newMousePosition = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
+        if (newMousePosition == null) {
+            isDrawing = false;
+            return;
+        }
+        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, newMousePosition.x, newMousePosition.y,
+                (x, y) -> setGOLPixel(x, y, true));
+        mousePosition.setLocation(newMousePosition);
+        window.repaint();
     }
 
     @Override
@@ -244,36 +323,4 @@ public class GOLWindowControl implements
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent internalFrameEvent) { }
-
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-        if (!isDrawing || GOLMain.getInstance().getMode() != GOLMode.DRAW)
-            return;
-        Point newMousePosition = window.getZoomHandler().transformToImageCoordinate(mouseEvent.getX(), mouseEvent.getY());
-        if (newMousePosition == null) {
-            isDrawing = false;
-            return;
-        }
-        PixelStreams.forEachPixelInLine(mousePosition.x, mousePosition.y, newMousePosition.x, newMousePosition.y,
-                (x, y) -> setGOLPixel(x, y, true));
-        mousePosition.setLocation(newMousePosition);
-        window.repaint();
-    }
-
-    public void changeLifeColor() {
-        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Lebenden Zellen", aliveColor);
-        if (newColor != null && aliveColor != newColor) {
-            aliveColor = newColor;
-            updateAllCells();
-        }
-    }
-
-    public void changeDeadColor() {
-        Color newColor = JColorChooser.showDialog(getWindow(), "Farbe der Leeren Zellen", deadColor);
-        if (newColor != null && deadColor != newColor) {
-            deadColor = newColor;
-            updateAllCells();
-        }
-    }
-    //#endregion
 }

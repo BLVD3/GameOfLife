@@ -45,7 +45,7 @@ public class GOLWindow extends ImageViewer {
         speedSlider.setValue(10);
 
         JButton stepButton = new JButton("Schritt");
-        stepButton.addActionListener(e -> this.control.stepButtonPressed());
+        stepButton.addActionListener(e -> this.control.tryStep());
 
         speedLabel = new JLabel("2");
         speedLabel.setForeground(new Color(140, 140, 140));

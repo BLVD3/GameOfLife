@@ -2,9 +2,15 @@ package de.hhn.gameoflife.util;
 
 import de.hhn.gameoflife.util.listeners.PixelListener;
 
+/**
+ * Class containing methods to help with drawing
+ * @author Nico Vogel
+ * @version 1.0
+ */
+
 public class PixelStreams {
     /**
-     * Bersenham Algorithm
+     * Bersenham Algorithm to draw a straight line
      * @param x0 start x
      * @param y0 start y
      * @param x1 end x

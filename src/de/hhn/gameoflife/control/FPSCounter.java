@@ -4,12 +4,20 @@ import de.hhn.gameoflife.util.listeners.FPSChangedListener;
 
 import java.util.HashSet;
 
+/**
+ * This object keeps track of Time and frames and calculates the frames per second every time a second passed.
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class FPSCounter {
     private HashSet<FPSChangedListener> listeners;
     private int frames;
     private int fps;
     private long lastUpdate;
 
+    /**
+     * @return the current frames per second
+     */
     public int getFps() {
         return fps;
     }
@@ -21,6 +29,9 @@ public class FPSCounter {
         lastUpdate = System.currentTimeMillis();
     }
 
+    /**
+     * call once every frame
+     */
     public void add() {
         if (System.currentTimeMillis() - lastUpdate > 1000) {
             fps = frames;
@@ -32,6 +43,9 @@ public class FPSCounter {
             frames++;
     }
 
+    /**
+     * Listener gets called everytime add gets called after a second passed
+     */
     public void addListener(FPSChangedListener listener) {
         listeners.add(listener);
     }
@@ -40,7 +54,7 @@ public class FPSCounter {
         listeners.remove(listener);
     }
 
-    public void fireFPSChangedEvent() {
+    private void fireFPSChangedEvent() {
         listeners.forEach(listener -> listener.fpsChanged(fps));
     }
 }
