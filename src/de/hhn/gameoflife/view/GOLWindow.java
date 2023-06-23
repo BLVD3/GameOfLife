@@ -6,9 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Window displaying a GOLSimulation using an ImageViewer
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class GOLWindow extends ImageViewer {
     private final GOLWindowControl control;
-    private final JSlider speedSlider;
     private final JLabel speedLabel;
     private final JLabel fpsLabel;
     private final JPopupMenu popupMenu;
@@ -39,7 +43,7 @@ public class GOLWindow extends ImageViewer {
         JButton menuButton = new JButton(UIManager.getIcon("FileChooser.detailsViewIcon"));
         menuButton.addActionListener(e -> popupMenu.show(menuButton, menuButton.getWidth() - popupMenu.getWidth(), menuButton.getHeight()));
 
-        speedSlider = new JSlider();
+        JSlider speedSlider = new JSlider();
         speedSlider.setMinimum(0);
         speedSlider.setMaximum(101);
         speedSlider.setValue(10);
@@ -74,10 +78,16 @@ public class GOLWindow extends ImageViewer {
         pack();
     }
 
+    /**
+     * Sets the text that intends to show the current target fps
+     */
     public void setSpeedLabel(String text) {
         speedLabel.setText(text);
     }
 
+    /**
+     * Changes the number displayed by the fpsLabel
+     */
     public void changeFpsDisplay(int fps) {
         fpsLabel.setText("fps: " + fps);
     }

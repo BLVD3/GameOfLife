@@ -5,6 +5,11 @@ import de.hhn.gameoflife.control.GOLMain;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Dialog used to create a new Window
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class GOLWindowDialog extends JInternalFrame {
 
     GOLMainWindow window;

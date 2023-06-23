@@ -13,11 +13,16 @@ import java.awt.image.BufferedImage;
 /**
  * Renders a BufferedImage on itself. Aspect ratio is considered during rendering.<br/>
  * Panel is also able to zoom into the image.
+ * @author Nico Vogel
+ * @version 1.0
  */
 public class ImageRendererPanel extends JPanel implements ComponentListener, ZoomChangedListener {
     private BufferedImage image; // Image which will be drawn on the Panel
     private final ZoomHandler zoom; // Helper class to calculate Size, Zoom and Position of the Image
 
+    /**
+     * @return the image this panel renders. Changing this image does not break the renderer
+     */
     public BufferedImage getImage() {
         return image;
     }
@@ -29,6 +34,9 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
         addComponentListener(this);
     }
 
+    /**
+     * changes the image
+     */
     public void swapImage(BufferedImage image) {
         this.image = image;
         zoom.resizeImage(new Dimension(image.getWidth(), image.getHeight()));
@@ -72,6 +80,9 @@ public class ImageRendererPanel extends JPanel implements ComponentListener, Zoo
     @Override
     public void scaleChanged(double newZoom) { }
 
+    /**
+     * @return the class that handles the zoom. May be used to find out where on the image a click happened
+     */
     public ZoomHandler getZoomHandler() {
         return zoom;
     }

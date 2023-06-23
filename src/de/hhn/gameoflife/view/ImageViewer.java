@@ -4,13 +4,15 @@ import de.hhn.gameoflife.util.listeners.ZoomChangedListener;
 import de.hhn.gameoflife.util.ZoomHandler;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Internal frame which views an image.
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class ImageViewer extends JInternalFrame implements MouseWheelListener, KeyListener, ZoomChangedListener, AdjustmentListener {
     private final ImageRendererPanel panel;
     private final JLabel zoomLabel;
@@ -73,6 +75,9 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         setVisible(true);
     }
 
+    /**
+     * @return the image this panel renders. Changing this image does not break the renderer
+     */
     public BufferedImage getImage() {
         return panel.getImage();
     }
@@ -91,14 +96,23 @@ public class ImageViewer extends JInternalFrame implements MouseWheelListener, K
         }
     }
 
+    /**
+     * @return the class that handles the zoom. May be used to find out where on the image a click happened
+     */
     public ZoomHandler getZoomHandler() {
         return panel.getZoomHandler();
     }
 
+    /**
+     * add a MouseListener to the image panel
+     */
     public void addImageMouseListener(MouseListener listener) {
         panel.addMouseListener(listener);
     }
 
+    /**
+     * add a MouseMotionListener to the image panel
+     */
     public void addImageMouseMotionListener(MouseMotionListener listener) {
         panel.addMouseMotionListener(listener);
     }

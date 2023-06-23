@@ -7,6 +7,11 @@ import de.hhn.gameoflife.util.GOLMode;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Main Window of the application
+ * @author Nico Vogel 215998
+ * @version 1.0
+ */
 public class GOLMainWindow extends JFrame {
     GOLMain control;
 
@@ -60,15 +65,22 @@ public class GOLMainWindow extends JFrame {
         setVisible(true);
     }
 
+
     private void newWindowButtonPressed() {
         newWindowDialog.setVisible(true);
     }
 
+    /**
+     * Adds a InternalFrame to the DesktopPane
+     */
     public void addInternalFrame(JInternalFrame frame) {
         if (frame != null)
             bottomPanel.add(frame);
     }
 
+    /**
+     * Changes the preview of a shape that can be placed on a GOLSimulation
+     */
     public void setShapePreview(GOLShape shape) {
         shapePreviewPanel.removeAll();
         shapePreviewPanel.add(new GOLShapePanel(shape, true));

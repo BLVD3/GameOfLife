@@ -7,6 +7,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+/**
+ * Window displaying all shapes located in ./data/shapes
+ * This window also enables the user to select these shapes
+ * @author Nico Vogel
+ * @version 1.0
+ */
 public class GOLShapeSelectorWindow extends JInternalFrame {
     JScrollPane scrollPane;
     JPanel container;
@@ -36,6 +42,9 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         setVisible(false);
     }
 
+    /**
+     * Adds a shape to the selection ! This method does not save the shape !
+     */
     public void addShape(GOLShape shape) {
         if (!shapes.containsKey(shape)) {
             GOLShapePanel panel = new GOLShapePanel(shape, false);
@@ -44,6 +53,9 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         }
     }
 
+    /**
+     * Removes a shape from the selection ! This method does not delete the shape !
+     */
     public void removeShape(GOLShape shape) {
         if (shapes.containsKey(shape)) {
             container.remove(shapes.get(shape));
@@ -51,6 +63,9 @@ public class GOLShapeSelectorWindow extends JInternalFrame {
         }
     }
 
+    /**
+     * Displays a shape as selected
+     */
     public void setSelectedShape(GOLShape shape) {
         if (shapes.containsKey(shape)) {
             if (currentlySelected != null)

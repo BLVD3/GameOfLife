@@ -1,7 +1,6 @@
 package de.hhn.gameoflife.view;
 
 import de.hhn.gameoflife.control.GOLMain;
-import de.hhn.gameoflife.model.GOLCellArray;
 import de.hhn.gameoflife.model.GOLShape;
 
 import javax.swing.*;
@@ -11,20 +10,24 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+/**
+ * A Panel that displays a Shape
+ * @author Nico Vogel 215998
+ * @version 1.0
+ */
 public class GOLShapePanel extends JPanel {
-    private static Border UNSELECTED_BORDER = BorderFactory.createLineBorder(new Color(0x000000));
-    private static Border SELECTED_BORDER = BorderFactory.createLineBorder(new Color(0xFFFFFF));
+    private static final Border UNSELECTED_BORDER = BorderFactory.createLineBorder(new Color(0x000000));
+    private static final Border SELECTED_BORDER = BorderFactory.createLineBorder(new Color(0xFFFFFF));
 
     private final GOLShape shape;
-    private final boolean justPreview;
     private final JButton selectButton;
-    private final JButton deleteButton;
 
     private boolean selected;
 
-
+    /**
+     * @param justPreview when true, the panel will not display buttons to select or delete
+     */
     public GOLShapePanel(GOLShape shape, boolean justPreview) {
-        this.justPreview = justPreview;
         selected = false;
         setLayout(new BorderLayout());
         JPanel leftPanel = new JPanel();
@@ -36,6 +39,7 @@ public class GOLShapePanel extends JPanel {
         setBorder(UNSELECTED_BORDER);
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
+        JButton deleteButton;
         if (shape == null) {
             this.shape = null;
             selectButton = null;
@@ -61,8 +65,8 @@ public class GOLShapePanel extends JPanel {
             deleteButton.setBackground(new Color(0xDA0000));
             rightPanel.add(selectButton, BorderLayout.PAGE_START);
             rightPanel.add(deleteButton, BorderLayout.PAGE_END);
-            selectButton.addActionListener(e -> selectButtonPressed());
-            deleteButton.addActionListener(e -> deleteButtonPressed());
+            selectButton.addActionListener(e -> GOLMain.getInstance().getShapeSelector().shapeSelected(shape));
+            deleteButton.addActionListener(e -> GOLMain.getInstance().getShapeSelector().shapeDeleteButtonPressed(shape));
         }
         else {
             selectButton = null;
@@ -70,6 +74,9 @@ public class GOLShapePanel extends JPanel {
         }
     }
 
+    /**
+     * Method that resizes an image to fit the panel
+     */
     private Image scaleImage(BufferedImage image) {
         float ratio = (float) image.getWidth() / image.getHeight();
         if (ratio >= 1)
@@ -77,6 +84,9 @@ public class GOLShapePanel extends JPanel {
         return image.getScaledInstance(Math.round(38 * ratio), 38, Image.SCALE_SMOOTH);
     }
 
+    /**
+     * Changes the panels appearance
+     */
     public void setSelected(boolean state) {
         selected = state;
         if (selected) {
@@ -93,15 +103,10 @@ public class GOLShapePanel extends JPanel {
         }
     }
 
+    /**
+     * @return the shape it displays
+     */
     public GOLShape getShape() {
         return shape;
-    }
-
-    private void selectButtonPressed() {
-        GOLMain.getInstance().getShapeSelector().shapeSelected(shape);
-    }
-
-    private void deleteButtonPressed() {
-        GOLMain.getInstance().getShapeSelector().shapeDeleteButtonPressed(shape);
     }
 }
